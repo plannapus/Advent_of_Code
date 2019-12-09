@@ -1,7 +1,7 @@
 #Day 5 Puzzle 1
 f51=function(x){
   n=1
-  out <- c()
+  out = c()
   while(x[n]%%100!=99){
     op = x[n]%%100
     par = (x[n]%/%10^(2:4))%%10
@@ -12,20 +12,20 @@ f51=function(x){
       }else{
         x[x[n+3]+1]=ifelse(par[1],x[n+1],x[x[n+1]+1])+ifelse(par[2],x[n+2],x[x[n+2]+1])
       }
-      n <- n+4
+      n = n+4
     } else if(op==2){
       if(par[3]){
         x[n+3]=ifelse(par[1],x[n+1],x[x[n+1]+1])*ifelse(par[2],x[n+2],x[x[n+2]+1])
       }else{
         x[x[n+3]+1]=ifelse(par[1],x[n+1],x[x[n+1]+1])*ifelse(par[2],x[n+2],x[x[n+2]+1])
       }
-      n <- n+4
+      n = n+4
     } else if(op==3){
       if(!par[1]){x[x[n+1]+1]=1}else{x[n+1]=1}
-      n <- n+2
+      n = n+2
     } else if(op==4){
-      out <- c(out,ifelse(par[1],x[n+1],x[x[n+1]+1]))
-      n <- n+2
+      out = c(out,ifelse(par[1],x[n+1],x[x[n+1]+1]))
+      n = n+2
     }
   }
   as.integer(paste(out,collapse=""))
@@ -37,7 +37,7 @@ f51(a)
 #Day 5 Puzzle 2
 f52=function(x){
   n=1
-  out <- c()
+  out = c()
   while(x[n]%%100!=99){
     op = x[n]%%100
     par = (x[n]%/%10^(2:4))%%10
@@ -86,7 +86,7 @@ f52=function(x){
       }
       n = n+4
     } else if(op==8){
-      p1 <- ifelse(par[1],x[n+1],x[x[n+1]+1])
+      p1  =  ifelse(par[1],x[n+1],x[x[n+1]+1])
       p2 = ifelse(par[2],x[n+2],x[x[n+2]+1])
       if(par[3]){
         x[n+3] = ifelse(p1==p2,1,0)

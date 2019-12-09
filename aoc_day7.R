@@ -2,7 +2,7 @@
 f71=function(x,inputs){
   n=1
   m=1
-  out <- c()
+  out = c()
   while(x[n]%%100!=99){
     op = x[n]%%100
     par = (x[n]%/%10^(2:4))%%10
@@ -50,7 +50,7 @@ f71=function(x,inputs){
       }
       n = n+4
     } else if(op==8){
-      p1 <- ifelse(par[1],x[n+1],x[x[n+1]+1])
+      p1 = ifelse(par[1],x[n+1],x[x[n+1]+1])
       p2 = ifelse(par[2],x[n+2],x[x[n+2]+1])
       if(par[3]){
         x[n+3] = ifelse(p1==p2,1,0)
@@ -64,7 +64,7 @@ f71=function(x,inputs){
 }
 
 phases = expand.grid(0:4,0:4,0:4,0:4,0:4)
-ph <- phases[apply(phases,1,function(x)!any(duplicated(x))),]
+ph = phases[apply(phases,1,function(x)!any(duplicated(x))),]
 x = scan("input7.txt",what=integer(),sep=",")
 res = c()
 for(j in 1:nrow(ph)){
@@ -80,7 +80,7 @@ max(res)
 
 #Day 7 Puzzle 2
 f72=function(x,inputs,n=1,m=1){
-  out <- c()
+  out = c()
   while(x[n]%%100!=99){
     op = x[n]%%100
     par = (x[n]%/%10^(2:4))%%10
@@ -132,7 +132,7 @@ f72=function(x,inputs,n=1,m=1){
       }
       n = n+4
     } else if(op==8){
-      p1 <- ifelse(par[1],x[n+1],x[x[n+1]+1])
+      p1 = ifelse(par[1],x[n+1],x[x[n+1]+1])
       p2 = ifelse(par[2],x[n+2],x[x[n+2]+1])
       if(par[3]){
         x[n+3] = ifelse(p1==p2,1,0)
@@ -146,7 +146,7 @@ f72=function(x,inputs,n=1,m=1){
 }
 
 phases = expand.grid(5:9,5:9,5:9,5:9,5:9)
-ph <- phases[apply(phases,1,function(x)!any(duplicated(x))),]
+ph = phases[apply(phases,1,function(x)!any(duplicated(x))),]
 x = scan("input7.txt",what=integer(),sep=",")
 res = c()
 for(j in 1:nrow(ph)){

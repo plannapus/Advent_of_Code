@@ -1,8 +1,8 @@
 intfast=function(X,inputs=c(),n=1,m=1,rbase=0,verbose=FALSE){
   options(digits=22)
-  x <- rep(0,1e6)
+  x = rep(0,1e6)
   x[seq_along(X)]=X
-  out <- 0
+  out = 0
   while(x[n]%%100!=99){
     op = x[n]%%100
     par = (x[n]%/%10^(2:4))%%10
