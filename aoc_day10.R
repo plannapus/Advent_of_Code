@@ -15,20 +15,22 @@ max(ast)
 station = coord[which.max(ast),]-1
 asteroids = coord[-which.max(ast),]-1
 n=0
-angs = apply(asteroids,1,function(x){d=station-x;atan2(d[1],d[2])})
-topped = angs + pi/2
-topped[topped >= pi] = topped[topped >= pi] - 2*pi
-angs_sort = unique(angs[order(topped)])
-l = apply(asteroids,1,function(x)sum((station-x)^2))
-destroyed = c()
-for(i in seq_along(angs_sort)){
-  wang = angs_sort[i]
-  wlos = angs==wang
-  wlen = min(l[wlos])
-  n = n+1
-  if(n==200){ast200 = asteroids[wlos & l==wlen,]}
-  destroyed = c(destroyed,which(wlos & l==wlen))
+while(n!=200){
+  angs = apply(asteroids,1,function(x){d=station-x;atan2(d[1],d[2])})
+  topped = angs + pi/2
+  topped[topped >= pi] = topped[topped >= pi] - 2*pi
+  angs_sort = unique(angs[order(topped)])
+  l = apply(asteroids,1,function(x)sum((station-x)^2))
+  destroyed = c()
+  for(i in seq_along(angs_sort)){
+   wang = angs_sort[i]
+   wlos = angs==wang
+   wlen = min(l[wlos])
+   n = n+1
+   if(n==200){ast200 = asteroids[wlos & l==wlen,]}
+   destroyed = c(destroyed,which(wlos & l==wlen))
+  }
+  asteroids = asteroids[-destroyed,]
 }
-asteroids = asteroids[-destroyed,]
 ast200[2]*100 + ast200[1]
 #2732
