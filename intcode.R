@@ -25,7 +25,7 @@ intcode=function(X,inputs=c(),n=1,m=1,rbase=0,verbose=FALSE){
       n = n+4
     } else if(op==3){
       if(m>length(inputs)){
-        return(list(op=x,out=paste(out[-1],collapse=""),n=n,m=m,status=1))
+        return(list(op=x,out=paste(out[-1],collapse=""),n=n,m=m,rb=rbase,status=1))
       }else{
         x[pos] = inputs[m]
         m = m +1
@@ -56,5 +56,5 @@ intcode=function(X,inputs=c(),n=1,m=1,rbase=0,verbose=FALSE){
       if(op==9) cat(sprintf("Changed relative base to %i.\n",rbase))
     }
   }
-  return(list(op=x,out=paste(out[-1],collapse=""),n=n,m=m,status=0))
+  return(list(op=x,out=paste(out[-1],collapse=""),n=n,m=m,rb=rbase,status=0))
 }

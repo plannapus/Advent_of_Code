@@ -26,7 +26,7 @@ intfast=function(X,inputs=c(),n=1,m=1,rbase=0,verbose=FALSE){
       n = n+4
     } else if(op==3){
       if(m>length(inputs)){
-        return(list(op=x,out=paste(out,collapse=""),n=n,m=m,status=1))
+        return(list(op=x,out=paste(out[-1],collapse=""),n=n,m=m,rb=rbase,status=1))
       }else{
         pos = `if`(par[1]==1,n+1,x[n+1]+1+`if`(par[1]==2,rbase,0))
         x[pos] = inputs[m]
@@ -76,5 +76,5 @@ intfast=function(X,inputs=c(),n=1,m=1,rbase=0,verbose=FALSE){
       if(verbose) cat(sprintf("Changed relative base to %i.\n",rbase))
     }
   }
-  list(op=x,out=out[-1],n=n,m=m,status=0)
+  list(op=x,out=paste(out[-1],collapse=""),n=n,m=m,rb=rbase,status=0)
 }
