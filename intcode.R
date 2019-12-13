@@ -1,4 +1,4 @@
-intcode=function(X,inputs=c(),n=1,m=1,rbase=0,verbose=FALSE){
+intcode=function(X,inputs=c(),n=1,m=1,rbase=0,verbose=FALSE,aggregated=FALSE){
   options(digits=22)
   x = rep(0,1e6)
   x[seq_along(X)] = X
