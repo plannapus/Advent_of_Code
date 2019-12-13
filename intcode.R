@@ -5,6 +5,7 @@ intcode=function(X,inputs=c(),n=1,m=1,rbase=0,verbose=FALSE){
   out = 0
   position = function(a,n,x){`if`(par[a]==1,n+a,x[n+a]+1+`if`(par[a]==2,rbase,0))}
   value = function(a,n,x){`if`(par[a]==1,x[n+a],x[x[n+a]+1+`if`(par[a]==2,rbase,0)])}
+  output = function(out,aggregated){`if`(aggregated,paste(out[-1],collapse=""),out[-1])}
   while(x[n]%%100!=99){
     op = x[n]%%100
     par = (x[n]%/%10^(2:4))%%10
@@ -25,7 +26,7 @@ intcode=function(X,inputs=c(),n=1,m=1,rbase=0,verbose=FALSE){
       n = n+4
     } else if(op==3){
       if(m>length(inputs)){
-        return(list(op=x,out=paste(out[-1],collapse=""),n=n,m=m,rb=rbase,status=1))
+        return(list(op=x,out=output(out,aggregated),n=n,m=m,rb=rbase,status=1))
       }else{
         x[pos] = inputs[m]
         m = m +1
@@ -56,5 +57,5 @@ intcode=function(X,inputs=c(),n=1,m=1,rbase=0,verbose=FALSE){
       if(op==9) cat(sprintf("Changed relative base to %i.\n",rbase))
     }
   }
-  return(list(op=x,out=paste(out[-1],collapse=""),n=n,m=m,rb=rbase,status=0))
+  return(list(op=x,out=output(out,aggregated),n=n,m=m,rb=rbase,status=0))
 }

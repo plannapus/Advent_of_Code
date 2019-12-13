@@ -9,8 +9,8 @@ i=1
 A = list(n=1,rb=0,status=1,op=code)
 while(A$status){
   A = intfast(A$op,pos[i,3],A$n,1,A$rb)
-  pos[i,3]=as.integer(substr(A$out,1,1))
-  newdir=as.integer(substr(A$out,2,2))
+  pos[i,3]=as.integer(A$out[1])
+  newdir=as.integer(A$out[2])
   w=which(dirs%in%dir)+ifelse(newdir,-1,1)
   if(!w%in%1:4) w = w%%4
   if(!w) w = 4
@@ -37,8 +37,8 @@ i=1
 dir="up"
 while(A$status){
   A = intfast(A$op,pos[i,3],A$n,1,A$rb)
-  pos[i,3]=as.integer(substr(A$out,1,1))
-  newdir=as.integer(substr(A$out,2,2))
+  pos[i,3]=as.integer(A$out[1])
+  newdir=as.integer(A$out[2])
   w=which(dirs%in%dir)+ifelse(newdir,-1,1)
   if(!w%in%1:4) w = w%%4
   if(!w) w = 4
