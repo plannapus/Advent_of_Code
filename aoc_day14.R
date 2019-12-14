@@ -66,12 +66,12 @@ orePerFuel(res,1)
 #Day 14 Puzzle 2
 Min = 1000000000000%/%orePerFuel(res,1)
 Max = 10*Min
-while(Max > Min+1){
-  Mean = (Max + Min) %/% 2
+while(Max>Min+1){
+  Mean = (Max+Min)%/%2
   if(orePerFuel(res,Mean) > 1000000000000){
     Max = Mean
   }else{
-    Max = Mean
+    Min = Mean
   }
 }
 Min
