@@ -8,4 +8,4 @@ https://adventofcode.com/2019
 ## Visualizations
 ### Day 13
 
-![](day13.gif)
+![](visualizations/day13.gif)
