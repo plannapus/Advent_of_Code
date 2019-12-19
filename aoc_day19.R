@@ -11,9 +11,9 @@ cat(sum(res==1))
 #126
 
 #Day 19 Puzzle 2
-x=10
-y=100
-while(TRUE){
+x=0
+y=99
+repeat{
   if(as.integer(intfast(code,c(x,y),1,1,0,FALSE,FALSE)$out)){
     if(as.integer(intfast(code,c(x+99,y-99),1,1,0,FALSE,FALSE)$out)){
       break
