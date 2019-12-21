@@ -1,5 +1,6 @@
 #Day 18 Puzzle 1
 library(igraph)
+library(rgenoud)
 options(digits=22)
 input = readLines("input18.txt")
 map = do.call(rbind,strsplit(input,""))
@@ -23,26 +24,28 @@ connected = which(ww==1,arr.ind=T)
 key_vertices = apply(keys,1,function(x)which(walkable[,1]==x[1]&walkable[,2]==x[2]))
 door_vertices = apply(doors,1,function(x)which(walkable[,1]==x[1]&walkable[,2]==x[2]))
 g = graph_from_edgelist(connected,directed=FALSE)
-
-#Compute all possible paths
-step=cbind(1,key_vertices[sapply(key_vertices,function(x)!any(door_vertices%in%shortest_paths(g,1,x)$vpath[[1]]))])
-for(i in 1:26){
-  step = do.call(rbind,lapply(seq_len(nrow(step)),function(x){
-    path=step[x,]
-    not = key_vertices%in%path
-    other = key_vertices[!not]
-    do.call(rbind,lapply(other[sapply(other,function(y)!any(door_vertices[!not]%in%shortest_paths(g,tail(path,1),y)$vpath[[1]]))],function(z)c(path,z)))
-  }))
-  cat(i,":",nrow(step),"\r")
-}
-save(step,file="step.Rdata")
-
-#Measure their distance
 dist=distances(g)
-d=c()
-for(i in 1:nrow(step)){
-  d[i] = sum(apply(embed(step,2),1,function(x)dist[x[1],x[2]]))
-  cat(i,"\r")
-}
-cat("\n")
-cat(min(d))
+
+comb=as.data.frame(gtools::combinations(27,2,1:27))
+comb$dist = apply(comb,1,function(x)dist[x[1],x[2]])
+door_on_path = t(apply(comb,1,function(x)door_vertices%in%shortest_paths(g,x[1],x[2])$vpath[[1]]))
+
+# 
+# #Compute all possible paths
+# step=cbind(1,key_vertices[sapply(key_vertices,function(x)!any(door_vertices%in%shortest_paths(g,1,x)$vpath[[1]]))])
+# for(i in 1:26){
+#   step = do.call(rbind,lapply(seq_len(nrow(step)),function(x){
+#     path=step[x,]
+#     not = key_vertices%in%path
+#     other = key_vertices[!not]
+#     do.call(rbind,lapply(other[sapply(other,function(y)!any(door_vertices[!not]%in%shortest_paths(g,tail(path,1),y)$vpath[[1]]))],function(z)c(path,z)))
+#   }))
+#   cat(i,":",nrow(step),"\r")
+# }
+# save(step,file="step.Rdata")
+# 
+# #Measure their distance
+# dist=distances(g)
+# d= sum(apply(embed(step,2),1,function(x)dist[x[1],x[2]]))
+# cat("\n")
+# cat(min(d))
