@@ -1,0 +1,38 @@
+east
+take food ration
+south
+take prime number
+north
+east
+take manifold
+east
+east
+take jam
+west
+north
+east
+spool of cat6
+west
+north
+take fuel cell
+south
+south
+west
+west
+west
+north
+north
+west
+take mug
+east
+north
+east
+east
+take loom
+west
+west
+south
+south
+west
+north
+west
