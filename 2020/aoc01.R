@@ -2,6 +2,7 @@
 input <- scan("input01.txt")
 li <- do.call(rbind,lapply(input,function(x)if(any((x+input)==2020))c(which(input==x),which((x+input)==2020))))
 prod(input[li[1,]])
+# 913824
 
 # Part2
 n <- seq_along(input)
@@ -14,3 +15,4 @@ for(i in n){
     }
   }
 }
+# 240889536
