@@ -33,3 +33,24 @@ sum(apply(cbind(x1,y1),1,function(X)map[X[2],X[1]])=="#") *
   sum(apply(cbind(x4,y1),1,function(X)map[X[2],X[1]])=="#") *
   sum(apply(cbind(x1[1:length(y5)],y5),1,function(X)map[X[2],X[1]])=="#") 
 #1478615040
+
+
+####Now the same but vectorized:
+## Part 1
+x <- ((1:nrow(map)-1)*3)%%ncol(map)+1
+y <- 1:nrow(map)
+sum(apply(cbind(x,y),1,function(X)map[X[2],X[1]])=="#")
+
+## Part 2
+x1 <- ((1:nrow(map)-1))%%ncol(map)+1
+x2 <- ((1:nrow(map)-1)*3)%%ncol(map)+1
+x3 <- ((1:nrow(map)-1)*5)%%ncol(map)+1
+x4 <- ((1:nrow(map)-1)*7)%%ncol(map)+1
+y1 <- 1:nrow(map)
+y5 <- seq(1,nrow(map),2)
+
+sum(apply(cbind(x1,y1),1,function(X)map[X[2],X[1]])=="#") * 
+  sum(apply(cbind(x2,y1),1,function(X)map[X[2],X[1]])=="#") *
+  sum(apply(cbind(x3,y1),1,function(X)map[X[2],X[1]])=="#") *
+  sum(apply(cbind(x4,y1),1,function(X)map[X[2],X[1]])=="#") *
+  sum(apply(cbind(x1[1:length(y5)],y5),1,function(X)map[X[2],X[1]])=="#") 
