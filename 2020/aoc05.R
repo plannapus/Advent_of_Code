@@ -18,3 +18,13 @@ remains[!(remains-1)%in%remains & !(remains+1)%in%remains]
 seats <- min(seats_taken):max(seats_taken)
 seats[!seats%in%seats_taken]
 #711
+
+
+
+#####Alternative to the whole problem:
+input <- readLines("input05.txt")
+bits <- chartr("FBLR","0101",input)
+seats_taken <- strtoi(bits,2)
+max(seats_taken) #Part 1
+seats <- min(seats_taken):max(seats_taken)
+seats[!seats%in%seats_taken] #Part 2
