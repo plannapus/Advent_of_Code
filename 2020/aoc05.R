@@ -13,3 +13,8 @@ max(seats_taken)
 remains <- (0:1023)[!(0:1023)%in%seats_taken]
 remains[!(remains-1)%in%remains & !(remains+1)%in%remains]
 #711
+
+##Alternative for part2:
+seats <- min(seats_taken):max(seats_taken)
+seats[!seats%in%seats_taken]
+#711
