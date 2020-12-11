@@ -19,6 +19,72 @@ repeat{
   if(identical(step,map)) break
   map <- step
 }
-cat("\n")
 sum(step=="#")
 #2483
+
+map <- do.call(rbind,strsplit(input,""))
+count_seats <- function(X,map){
+  x <- X[1]
+  y <- X[2]
+  n <- 0
+  if(x!=1){
+    n <- n + grepl("^\\.*#",paste(map[(x-1):1,y],collapse=""))
+    if(y!=1){
+      n <- n + grepl("^\\.*#",paste(diag(map[(x-1):1,(y-1):1,drop=FALSE]),collapse=""))
+    }
+    if(y!=ncol(map)){
+      n <- n + grepl("^\\.*#",paste(diag(map[(x-1):1,(y+1):ncol(map),drop=FALSE]),collapse=""))
+    }
+  }
+  if(x!=nrow(map)){
+    n <- n + grepl("^\\.*#",paste(map[(x+1):nrow(map),y],collapse=""))
+    if(y!=1){
+      n <- n + grepl("^\\.*#",paste(diag(map[(x+1):nrow(map),(y-1):1,drop=FALSE]),collapse=""))
+    }
+    if(y!=ncol(map)){
+      n <- n + grepl("^\\.*#",paste(diag(map[(x+1):nrow(map),(y+1):ncol(map),drop=FALSE]),collapse=""))
+    }
+  }
+  if(y!=ncol(map)){
+    n <- n + grepl("^\\.*#",paste(map[x,(y+1):ncol(map)],collapse=""))
+  }
+  if(y!=1){
+    n <- n + grepl("^\\.*#",paste(map[x,(y-1):1],collapse=""))
+  }
+  n
+}
+
+m <- 0
+repeat{
+  m <- m+1
+  step <- map
+  taken <- which(map=="#",arr.ind=T)
+  empty <- which(map=="L",arr.ind=T)
+  if(!nrow(taken)){
+    step[map=="L"]<-"#"
+  }else{
+    next_t<-apply(taken,1,count_seats,map)
+    move <- taken[next_t>=5,]
+    if(nrow(move)){
+      for(i in 1:nrow(move)){
+        step[move[i,1],move[i,2]] <- "L"
+      }
+    }
+    if(nrow(empty)){
+      next_e <- apply(empty,1,count_seats,map)
+      move <- empty[next_e==0,]
+      if(nrow(move)){
+        for(i in 1:nrow(move)){
+          step[move[i,1],move[i,2]] <- "#"
+        }
+      }
+    }
+  }
+  if(identical(step,map)) break
+  map <- step
+  cat(m,"\n")
+  write(t(map),ncolumns=ncol(map),file="",sep="")
+}
+cat("\n")
+sum(step=="#")
+#3146 WRONG
