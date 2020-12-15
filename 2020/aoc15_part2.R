@@ -1,4 +1,3 @@
-options(digits=22)
 input <- c(13,16,0,12,15,1)
 last <- 0
 current <- 7
