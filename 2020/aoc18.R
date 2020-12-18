@@ -54,32 +54,7 @@ evaluate_unit <- function(x){
     return(NA)
   }
 }
-while(!all(grepl("^\\d+$",input))){
-  p <- gregexpr("[0-9][0-9 +]+[0-9]",input)
-  additions <- regmatches(input,p)
-  additions <- lapply(additions,evaluate_unit)
-  input <- sapply(seq_along(input),function(j){
-    inp <- input[j]
-    add <- additions[[j]]
-    W <- p[[j]]
-    l <- attr(W,"match.length")
-    L <- W+l
-    for(i in seq_along(add)){
-      if(!is.na(add[i])){
-        inp <- paste0(substr(inp,1,W[i]-1),add[i],substr(inp,L[i],nchar(inp)))
-        W <- W - l[i] + nchar(add[i])
-        L <- L - l[i] + nchar(add[i])
-      }
-    }
-    inp<-gsub("\\((\\d+)\\)","\\1",inp)
-    inp
-  })
-  input <- gsub("\\(([0-9]+)\\)","\\1",input)
-  w<-gregexpr("\\(([^()+]+)\\)",input)
-  innermost <- regmatches(input,w)
-  innermost <- lapply(innermost,function(x)gsub("[()]","",x))
-  innermost <- lapply(innermost,evaluate_unit)
-  input <- sapply(seq_along(input),function(j){
+replace_unit <- function(j, input, innermost, w){
     inp <- input[j]
     inn <- innermost[[j]]
     W <- w[[j]]
@@ -92,8 +67,20 @@ while(!all(grepl("^\\d+$",input))){
         L <- L - l[i] + nchar(inn[i])
       }
     }
+    inp<-gsub("\\((\\d+)\\)","\\1",inp)
     inp
-  })
+}
+while(!all(grepl("^\\d+$",input))){
+  p <- gregexpr("[0-9][0-9 +]+[0-9]",input)
+  additions <- regmatches(input,p)
+  additions <- lapply(additions,evaluate_unit)
+  input <- sapply(seq_along(input),function(j)replace_unit(j,input,additions,p))
+  input <- gsub("\\(([0-9]+)\\)","\\1",input)
+  w<-gregexpr("\\(([^()+]+)\\)",input)
+  innermost <- regmatches(input,w)
+  innermost <- lapply(innermost,function(x)gsub("[()]","",x))
+  innermost <- lapply(innermost,evaluate_unit)
+  input <- sapply(seq_along(input),function(j)replace_unit(j,input,innermost,w))
 }
 sum(as.integer64(input))
 #321176691637769
