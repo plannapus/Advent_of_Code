@@ -22,33 +22,40 @@ prod(sapply(tiles[which(n_matching_sides==2)],function(x)x$nb))
 #15003787688423
 
 #Part2
-# 
-# map <- matrix(nrow=120,ncol=120)
+for(i in 1:144){
+  tiles[[i]]$sides <- sides[[i]]
+  tiles[[i]]$matching_sides <- sapply(sides[[i]],function(x)x%in%unlist(sides[-i])|intToUtf8(rev(utf8ToInt(x)))%in%unlist(sides[-i]))
+  tiles[[i]]$n_matching <- n_matching_sides[i]
+}
+
+orient <- function(next_tile,w,side="right"){
+  if(side=="right"){
+    if(w[1]==1) next_tile <- t(next_tile[10:1,])
+    if(w[1]==2) next_tile <- t(next_tile[,10:1])
+    if(w[1]==4) next_tile <- next_tile[,10:1]
+    if(w[1]==5) next_tile <- t(next_tile)
+    if(w[1]==6) next_tile <- t(next_tile[10:1,10:1])
+    if(w[1]==7) next_tile <- next_tile[10:1,]
+    if(w[1]==8) next_tile <- next_tile[10:1,10:1]
+  }else if(side=="bottom"){
+    if(w[1]==4) next_tile <- t(next_tile[10:1,])
+    if(w[1]==7) next_tile <- t(next_tile[,10:1])
+    if(w[1]==5) next_tile <- next_tile[,10:1]
+    if(w[1]==3) next_tile <- t(next_tile)
+    if(w[1]==8) next_tile <- t(next_tile[10:1,10:1])
+    if(w[1]==2) next_tile <- next_tile[10:1,]
+    if(w[1]==6) next_tile <- next_tile[10:1,10:1]
+  }
+  next_tile
+}
+
+map <- matrix(nrow=120,ncol=120)
+
 # first_tile <- tiles[which(n_matching_sides==2)][[1]]$tile
 # fs <- sides[which(n_matching_sides==2)][[1]]
 # W <- which(sapply(fs,function(x)x%in%unlist(sides[which(n_matching_sides>2)])|intToUtf8(rev(utf8ToInt(x)))%in%unlist(sides[which(n_matching_sides>2)])))
 # map[1:10,1:10]<-first_tile[10:1,10:1]
 # used <- tiles[which(n_matching_sides==2)][[1]]$nb
-# orient <- function(next_tile,w,side="right"){
-#   if(side=="right"){
-#     if(w[1]==1) next_tile <- t(next_tile[10:1,])
-#     if(w[1]==2) next_tile <- t(next_tile[,10:1])
-#     if(w[1]==4) next_tile <- next_tile[,10:1]
-#     if(w[1]==5) next_tile <- t(next_tile)
-#     if(w[1]==6) next_tile <- t(next_tile[10:1,10:1])
-#     if(w[1]==7) next_tile <- next_tile[10:1,]
-#     if(w[1]==8) next_tile <- next_tile[10:1,10:1]
-#   }else if(side=="bottom"){
-#     if(w[1]==4) next_tile <- t(next_tile[10:1,])
-#     if(w[1]==7) next_tile <- t(next_tile[,10:1])
-#     if(w[1]==5) next_tile <- next_tile[,10:1]
-#     if(w[1]==3) next_tile <- t(next_tile)
-#     if(w[1]==8) next_tile <- t(next_tile[10:1,10:1])
-#     if(w[1]==2) next_tile <- next_tile[10:1,]
-#     if(w[1]==6) next_tile <- next_tile[10:1,10:1]
-#   }
-#   next_tile
-# }
 # for(i in 1:10){
 #   sidetile <- tiles[n_matching_sides==3&!sapply(tiles,function(x)x$nb)%in%used]
 #   s <- sides[n_matching_sides==3&!sapply(tiles,function(x)x$nb)%in%used]
@@ -75,9 +82,11 @@ prod(sapply(tiles[which(n_matching_sides==2)],function(x)x$nb))
 #   }
 # }
 # cutmap <- map[-c((0:11)*10+1,(1:12)*10),-c((0:11)*10+1,(1:12)*10)]
-# monster <- "                  # \n#    ##    ##    ###\n #  #  #  #  #  #   "
-# monster <- do.call(rbind,strsplit(el(strsplit(monster,"\n")),""))
-# pattern <- which(monster=="#",arr.ind=TRUE)
+
+monster <- "                  # \n#    ##    ##    ###\n #  #  #  #  #  #   "
+monster <- do.call(rbind,strsplit(el(strsplit(monster,"\n")),""))
+pattern <- which(monster=="#",arr.ind=TRUE)
+
 # map2 <- cutmap
 # n <- 0
 # for(i in 0:93){
