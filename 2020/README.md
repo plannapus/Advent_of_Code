@@ -7,4 +7,6 @@ https://adventofcode.com/2020
 
 ## Visualizations
 
+### Day 20:
+
 ![](visualisations/map20.png)
