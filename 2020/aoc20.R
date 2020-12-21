@@ -34,15 +34,15 @@ for(i in 1:144){
     m<-sapply(X$sides,function(x)x==y|intToUtf8(rev(utf8ToInt(x)))==y)
     if(any(m)){
       return(cbind(X$nb,which(m,arr.ind=T)))
-      }else{return(NULL)}
-    })
+    }else{return(NULL)}
+  })
   tiles[[i]]$matched <- do.call(rbind,mat)
 }
 
 reorient <- function(tile,side,previous,from="left"){
   if(from=="left"){
     w <- which(c(tile$side[side]==previous$side[2],intToUtf8(rev(utf8ToInt(tile$side[side])))==previous$side[2]))
-    if((side==4&from=="left")|(side==1&from=="top")){
+    if(side==4){
       if(w!=1){
         tile$tile <- tile$tile[10:1,]
       }
@@ -63,9 +63,9 @@ reorient <- function(tile,side,previous,from="left"){
     }
     if(side==3){
       if(w==1){
-        tile$tile <- t(tile$tile)[10:1,10:1]
-      }else{
         tile$tile <- t(tile$tile)[,10:1]
+      }else{
+        tile$tile <- t(tile$tile)[10:1,10:1]
       }
     }
   }
@@ -103,11 +103,11 @@ reorient <- function(tile,side,previous,from="left"){
                   paste(tile$tile[10,],collapse=""),
                   paste(tile$tile[,1],collapse=""))
   mat <- lapply(tiles,function(X){
-      m<-sapply(X$sides,function(x)x==tile$sides|intToUtf8(rev(utf8ToInt(x)))==tile$sides)
-      if(any(m)){
-        return(cbind(X$nb,which(m,arr.ind=T)))
-      }else{return(NULL)}
-    })
+    m<-sapply(X$sides,function(x)x==tile$sides|intToUtf8(rev(utf8ToInt(x)))==tile$sides)
+    if(any(m)){
+      return(cbind(X$nb,which(m,arr.ind=T)))
+    }else{return(NULL)}
+  })
   mat <- do.call(rbind,mat)
   tile$matched <- mat[mat[,1]!=tile$nb,]
   tile
@@ -123,9 +123,9 @@ for(j in 1:12){
     first_tile <- tiles[nbs==ind][[1]]
     first_tile$tile <- first_tile$tile[10:1,10:1]
     first_tile$sides <- c(paste(first_tile$tile[1,],collapse=""), 
-                    paste(first_tile$tile[,10],collapse=""), 
-                    paste(first_tile$tile[10,],collapse=""),
-                    paste(first_tile$tile[,1],collapse=""))
+                          paste(first_tile$tile[,10],collapse=""), 
+                          paste(first_tile$tile[10,],collapse=""),
+                          paste(first_tile$tile[,1],collapse=""))
     mat <- lapply(tiles,function(X){
       m<-sapply(X$sides,function(x)x==first_tile$sides|intToUtf8(rev(utf8ToInt(x)))==first_tile$sides)
       if(any(m)){
@@ -194,7 +194,7 @@ for(i in 1:94){
   }
 }
 sum(map2=="#")
-#1900
+#1705
 map3<-matrix(as.integer(factor(map2)),nr=96,nc=96)
 png("visualisations/map20.png",w=800,h=800)
 par(mar=c(0,0,0,0))
