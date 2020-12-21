@@ -5,6 +5,6 @@ https://adventofcode.com/2020
 ![](screenshot.png)
 
 
-##Visualizations
+## Visualizations
 
 ![](visualisations/map20.png)
