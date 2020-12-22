@@ -58,6 +58,7 @@ game <- function(p1,p2){
   return(list(winner=ifelse(length(p1),1,2), p1=p1, p2=p2))
 }
 g <- game(p1,p2)
-cat("\n\n")
+#cat("\n\n")
 if(g$w==1) cat(sum(g$p1*rev(seq_along(g$p1))))
 if(g$w==2) cat(sum(g$p2*rev(seq_along(g$p2))))
+#31963
