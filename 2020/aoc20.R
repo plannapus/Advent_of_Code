@@ -22,7 +22,7 @@ for(i in 1:144){
 prod(sapply(tiles[which(n_matching_sides==2)],function(x)x$nb))
 #15003787688423
 
-#Part2 (result do not match so far)
+#Part2
 for(i in 1:144){
   tiles[[i]]$sides <- sides[[i]]
   tiles[[i]]$matching_sides <- sapply(sides[[i]],function(x)x%in%unlist(sides[-i])|intToUtf8(rev(utf8ToInt(x)))%in%unlist(sides[-i]))
