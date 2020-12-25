@@ -4,6 +4,7 @@ https://adventofcode.com/2020
 
 ![](screenshot.png)
 
+![](screenshot2.png)
 
 ## Visualizations
 
