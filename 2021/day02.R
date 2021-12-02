@@ -1,7 +1,7 @@
 input <- read.table("input02.txt",sep=" ")
 by_instructions <- split(input[,2],input[,1])
 summed<- sapply(by_instructions,sum)
-summed[2]*(summed[1]-summed[3])
+summed['forward']*(summed['down']-summed['up'])
 #1693300
 
 aim <- 0
