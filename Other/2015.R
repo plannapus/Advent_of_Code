@@ -229,3 +229,220 @@ while(any(is.na(variables))){
 }
 
 variables['a']
+
+
+#Day 8
+## Part 1
+input <- readLines("input/2015_input08.txt")
+input2 <- scan("input/2015_input08.txt","")
+cat(input2,sep="",file="input/2015_flush08.txt")
+input3 <- scan("input/2015_flush08.txt","",allowEscapes=TRUE)
+cat(input3,sep="\n",file="input/2015_flush08.txt")
+s2 <- as.integer(gsub("^ +([0-9]+) .+$","\\1",system("wc -c input/2015_flush08.txt",intern=TRUE)))
+sum(nchar(input))-s2+length(input3)-1 #Ugly but seems to work
+# 1350
+
+## Part 2
+u <- table(unlist(strsplit(input,"")))
+2*length(input)+u['\\']+u['\"']
+#2085
+
+#Day 9
+## Part 1
+input <- readLines("input/2015_input09.txt")
+df <- as.data.frame(do.call(rbind,strsplit(input,"( to )|( = )")))
+df$V3 <- as.integer(df$V3)
+towns <- unique(c(df$V1,df$V2))
+library(combinat)
+pt <- permn(towns)
+d <- rep(0,length(pt))
+for(i in seq_along(pt)){
+  for(j in 1:7){
+    d[i] <- d[i] + c(df[df$V1==pt[[i]][j]&df$V2==pt[[i]][j+1],3],df[df$V2==pt[[i]][j]&df$V1==pt[[i]][j+1],3])
+  }
+  cat(i,"\r")
+}
+min(d)
+#251
+
+## Part 2
+max(d)
+#898
+
+# Day 10
+## Part 1
+input <- "1113222113"
+for(i in 1:40){
+  rl <- rle(el(strsplit(input,"")))
+  input <- paste0(paste0(rl$l,rl$v),collapse="")
+}
+nchar(input)
+#252594
+
+input <- "1113222113"
+for(i in 1:50){
+  rl <- rle(el(strsplit(input,"")))
+  input <- paste0(paste0(rl$l,rl$v),collapse="")
+}
+nchar(input)
+#3579328
+
+# Day 11
+## Part 1 (Does not work!)
+input <- "hepxcrrq"
+password <- el(strsplit(input,""))
+s <- sapply(password,function(x)which(letters==x))
+cond1 <- function(s){
+  r <- rle(diff(s))
+  any(r$l[r$v==1]>1)
+}
+cond2 <- function(s){
+  !any(s%in%c(9,12,15))
+}
+cond3 <- function(s){
+  r <- rle(apply(embed(s,2),1,function(x)x[1]==x[2]))
+  if(any(r$v)){
+    return(any(r$l[r$v]>2) | length(r$l[r$v])>1)
+  }else{
+    return(FALSE)
+  }
+}
+
+while(!(cond1(s)&cond2(s)&cond3(s))){
+  testset <- cbind(s[1],s[2],s[3],s[4],s[5],expand.grid(1:26,1:26,1:26))
+  A <- apply(testset,1,function(x)cond1(x)&cond2(x)&cond3(x))
+  if(any(A)){
+    cat(letters[c(t(testset[A,]))],sep="")
+    break
+  }else{
+    s[5]<-s[5]+1
+    if(s[5]%in%c(9,12,15))s[5] <- s[5]+1
+    if(s[5]>26){
+      s[4] <- s[4]+1
+      s[5] <- 1
+      if(s[4]%in%c(9,12,15))s[4] <- s[4]+1
+      if(s[4]>26){
+        s[3] <- s[3]+1
+        s[4] <- 1
+        if(s[3]%in%c(9,12,15))s[3] <- s[3]+1
+        if(s[3]>26){
+          s[2] <- s[2]+1
+          s[3] <- 1
+          if(s[2]%in%c(9,12,15))s[2] <- s[2]+1
+          if(s[2]>26){
+            s[1] <- s[1]+1
+            s[2] <- 1
+            if(s[1]%in%c(9,12,15))s[1] <- s[1]+1
+          }
+        }
+      }
+    }
+  }
+}
+#heqxxyzz
+s <- c(t(testset[A,]))+c(rep(0,4),1,0,0,0)
+#heqaabcc
+
+# Day 12
+## Part 1
+library(rjson)
+input <- fromJSON(readLines("input/2015_input12.txt"))
+sum(as.integer(unlist(input)),na.rm=T)
+#119433
+
+## Part 2
+depthwise <- function(js){
+  if("red"%in%js&!is.null(names(js))){
+    js <- NA
+  }
+  if(is.list(js)){js <- sapply(js,depthwise)}
+  js
+}
+output <- depthwise(input)
+sum(as.integer(unlist(output)),na.rm=TRUE)
+#68466
+
+# Day 13
+## Part 1
+input <- readLines("input/2015_input13.txt")
+parse.one <- function(res, result) {
+  m <- do.call(rbind, lapply(seq_along(res), function(i) {
+    if(result[i] == -1) return("")
+    st <- attr(result, "capture.start")[i, ]
+    substring(res[i], st, st + attr(result, "capture.length")[i, ] - 1)
+  }))
+  colnames(m) <- attr(result, "capture.names")
+  m
+}
+parsed <- regexpr("^(?<n1>[A-Z][a-z]+) .+ (?<sign>gain|lose) (?<score>[0-9]+) .+ (?<n2>[A-Z][a-z]+).$", input, perl=TRUE)
+tab <- as.data.frame(parse.one(input,parsed))
+tab$score <- as.integer(tab$score)
+tab$score <- ifelse(tab$sign=="lose",-1*tab$score,tab$score)
+library(combinat)
+pu <- permn(unique(tab$n1))
+hap <- rep(0,length(pu))
+for(i in seq_along(pu)){
+  sitting_plan <- embed(c(pu[[i]],pu[[i]][1]),2)
+  hap[i] <-sum(apply(sitting_plan,1,function(x)tab$score[tab$n1==x[1]&tab$n2==x[2]]+tab$score[tab$n2==x[1]&tab$n1==x[2]]))
+  cat(i,"\r")
+}
+max(hap)
+#733
+
+## Part 2
+tab2 <- rbind(tab, data.frame(n1="me",n2=unique(tab$n1),sign="gain",score=0),
+              data.frame(n2="me",n1=unique(tab$n1),sign="gain",score=0))
+pu2 <- permn(unique(tab2$n1))
+hap <- rep(0,length(pu2))
+for(i in seq_along(pu2)){
+  sitting_plan <- embed(c(pu2[[i]],pu2[[i]][1]),2)
+  hap[i] <-sum(apply(sitting_plan,1,function(x)tab2$score[tab2$n1==x[1]&tab2$n2==x[2]]+tab2$score[tab2$n2==x[1]&tab2$n1==x[2]]))
+  if(!as.logical(i%%1000))cat(i,"\r")
+}
+max(hap)
+#725
+
+#Day 14
+## Part 1
+input <- readLines("input/2015_input14.txt")
+parsed <- regexpr("^(?<n1>[A-Z][a-z]+) .+ (?<speed>[0-9]+) km/s for (?<t1>[0-9]+) seconds, but then must rest for (?<t2>[0-9]+) seconds.$", input, perl=TRUE)
+tab <- as.data.frame(parse.one(input,parsed))
+tab$speed <- as.integer(tab$speed)
+tab$t1 <- as.integer(tab$t1)
+tab$t2 <- as.integer(tab$t2)
+tab$dist <- 0
+
+for(i in 1:nrow(tab)){
+  distance <- 0
+  time <- 0
+  while(!any(time>=2503)){
+    distance <- c(distance,tail(distance,1)+tab$speed[i]*(1:tab$t1[i]))
+    time <- c(time,tail(time,1)+1:tab$t1[i])
+    distance <- c(distance, tail(distance,1))
+    time <- c(time, tail(time,1)+tab$t2[i])
+  }
+  w <- which(time>=2503)[1]
+  tab$dist[i] <- distance[w]
+}
+max(tab$dist)
+#2655
+
+## Part 2
+distance <- time <- list()
+for(i in 1:nrow(tab)){
+  distance[[i]] <- 0
+  time[[i]] <- 0
+  while(!any(time[[i]]>=2503)){
+    distance[[i]] <- c(distance[[i]],tail(distance[[i]],1)+tab$speed[i]*(1:tab$t1[i]))
+    time[[i]] <- c(time[[i]],tail(time[[i]],1)+1:tab$t1[i])
+    distance[[i]] <- c(distance[[i]], tail(distance[[i]],1))
+    time[[i]] <- c(time[[i]], tail(time[[i]],1)+tab$t2[i])
+  }
+}
+pt <- rep(0,nrow(tab))
+for(i in 1:2503){
+  W <- which.max(sapply(1:nrow(tab),function(j)distance[[j]][which(time[[j]]>=i)[1]]))
+  pt[W] <- pt[W]+1
+}
+max(pt)
+#1059
