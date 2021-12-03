@@ -446,3 +446,30 @@ for(i in 1:2503){
 }
 max(pt)
 #1059
+
+# Day 15
+## Part 1
+input <- readLines("input/2015_input15.txt")
+caract <- apply(do.call(rbind,regmatches(input,gregexpr("-?[0-9]+",input))),2,as.integer)
+#eg <-expand.grid(0:100,0:100,0:100,0:100)
+#eg <- eg[apply(eg,1,sum)==100,]
+step1 <- do.call(rbind,lapply(0:100,function(x)expand.grid(x,0:(100-x))))
+step2 <- do.call(rbind,lapply(1:nrow(step1),function(x)cbind(step1[x,],0:(100-sum(step1[x,])))))
+colnames(step2)<-c("Sprinkles","Peanut","Frosting")
+step2$Sugar<-100-rowSums(step2)
+car <- cbind(apply(step2,1,function(x)sum(x*caract[,1])),
+      apply(step2,1,function(x)sum(x*caract[,2])),
+      apply(step2,1,function(x)sum(x*caract[,3])),
+      apply(step2,1,function(x)sum(x*caract[,4])))
+car[car<0]<-0
+pr <- apply(car,1,prod)
+max(pr)
+# 13882464
+
+## Part 2
+calories <- apply(step2,1,function(x)sum(x*caract[,5]))
+pr <- pr[calories==500]
+max(pr)
+# 11171160
+
+# Day 16
