@@ -473,3 +473,20 @@ max(pr)
 # 11171160
 
 # Day 16
+
+
+
+
+
+
+
+# Day 20
+input <- 29000000
+
+houses <- rep(0,1e6)
+for(i in 1:1e6){
+  houses[seq(i,1e6,by=i)]<-houses[seq(i,1e6,by=i)]+i*10
+  if(any(houses)>=input) break
+  if(!i%%1000)cat(i,":",max(houses),"\r")
+}
+which(houses>=input)
