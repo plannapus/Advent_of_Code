@@ -10,7 +10,7 @@ for(i in 1:80){
 length(input)
 #379114
 
-# Part 2 (unfinished)
+# Part 2
 library(bit64)
 input <- scan("input06.txt",sep=",")
 tab <- integer64(9)
