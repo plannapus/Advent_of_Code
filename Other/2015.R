@@ -475,6 +475,20 @@ max(pr)
 # Day 16
 
 # Day 17
+input <- scan("input/2015_input17.txt")
+pos <- list()
+tot <- 150
+for(i in 2:length(input)){
+  cb <- combn(input,i)
+  cs <- colSums(cb)
+  pos[[i]] <- cb[,cs==150]
+}
+sum(unlist(sapply(pos,ncol)))
+#1638
+s <- sapply(seq_along(pos),function(x)ifelse(!is.null(pos[[x]]), ifelse(ncol(pos[[x]]),ncol(pos[[x]]),NA),NA))
+s[!is.na(s)][1]
+# 17
+
 
 # Day 18
 
