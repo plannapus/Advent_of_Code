@@ -8,6 +8,7 @@ for(i in 1:80){
   }
 }
 length(input)
+#379114
 
 # Part 2 (unfinished)
 library(bit64)
@@ -22,3 +23,4 @@ for(i in 1:256){
   tab <- tab2
 }
 sum(tab)
+#1702631502303
