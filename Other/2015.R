@@ -474,13 +474,13 @@ max(pr)
 
 # Day 16
 
+# Day 17
 
+# Day 18
 
+# Day 19
 
-
-
-
-# Day 20
+# Day 20 (unfinished)
 input <- 29000000
 
 houses <- rep(0,1e6)
