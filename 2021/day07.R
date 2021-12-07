@@ -16,3 +16,10 @@ for(i in r[1]:r[2]){
 }
 min(d,na.rm=TRUE)
 #89791146
+
+
+# Easter egg!
+source("../2019/intcode_fast_but_dirty.R")
+A <- intfast(input)
+cat(rawToChar(as.raw(A$out)))
+# Ceci n'est pas une intcode program
