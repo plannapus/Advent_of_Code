@@ -42,8 +42,8 @@ for(i in 1:nrow(io)){
   }
   if(any(poolc==6)){
     s069 <- strsplit(pooln[which(poolc==6)],"")
-    S09 <- sapply(s069,function(x)all(displays[[3]][[1]]%in%x))
-    S69 <- sapply(s069,function(x)all(displays[[4]][[1]]%in%x))
+    S09 <- sapply(s069,function(x)all(displays[[3]]%in%x))
+    S69 <- sapply(s069,function(x)all(displays[[4]]%in%x))
     if(any(!S09)){
       six <- s069[!S09][[1]]
       displays[[3]] <- letters[1:7][!letters[1:7]%in%six]
@@ -67,15 +67,15 @@ for(i in 1:nrow(io)){
     output[no==5&grepl(displays[[3]],co)&grepl(displays[[6]],co)] <- 3
     output[no==5&!grepl(displays[[3]],co)] <- 5
   }else{
-    output[no==5 & sapply(displays[[3]],function(x)sum(grepl(x,co)))==2] <- 3
+    output[no==5 & sapply(co,function(x)sum(displays[[3]]%in%el(strsplit(x,""))))==2] <- 3
     if(length(displays[[2]])==1){
       output[no==5 & output!=3 & !grepl(displays[[2]],co)] <- 2
     }else{
-      output[no==5 & output!=3 & sapply(displays[[2]],function(x)sum(grepl(x,co)))==1] <- 2
+      output[no==5 & output!=3 & sapply(co,function(x)sum(displays[[2]]%in%el(strsplit(x,""))))==1] <- 2
     }
     output[no==5 & !output%in%c(2,3)]<-5
   }
-  outputs[i]<-as.integer(paste(output,collapse=""))
+  outputs[i]<-paste(output,collapse="")
 }
-sum(outputs)
-# 1182441
+sum(as.integer(outputs))
+# 974512
