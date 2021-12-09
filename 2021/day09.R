@@ -42,3 +42,9 @@ for(i in 1:nrow(map)){
 by_basin <- sapply(split(map,mapBasin),length)
 prod(tail(sort(by_basin),3))
 #1600104
+
+#visualization
+png("visualization/map09.png",w=500,h=500)
+par(mar=c(0,0,0,0),bg="black")
+image(mapBasin,col=sample(rainbow(209)),asp=1,b=0:209)
+dev.off()

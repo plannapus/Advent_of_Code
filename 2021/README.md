@@ -3,3 +3,9 @@
 https://adventofcode.com/2021
 
 ![](screenshot.png)
+
+
+## Visualizations
+
+### Day 9: Basin map
+![](visualization/map09.png)
