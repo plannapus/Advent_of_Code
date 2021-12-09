@@ -1,4 +1,5 @@
 input <- do.call(rbind,strsplit(readLines("input09.txt"),""))
+#input <- do.call(rbind,strsplit(readLines("test09.txt"),""))
 map <- apply(input,2,as.integer)
 lowpoints <- c()
 coords <- matrix(ncol=2)
@@ -16,3 +17,28 @@ for(i in 1:nrow(map)){
 }
 sum(lowpoints+1)
 # 512
+
+coords <- coords[-1,]
+mapBasin <- array(NA,dim=dim(map))
+whichBasin <- function(i,j){
+  if(map[i,j]==9) return(NA)
+  coord_to_check <- rbind(c(i-1,j),c(i+1,j),c(i,j-1),c(i,j+1))
+  coord_to_check <- coord_to_check[!coord_to_check[,1]%in%c(0,nrow(map)+1)&
+                                     !coord_to_check[,2]%in%c(0,ncol(map)+1),]
+  w <- apply(coord_to_check,1,function(x)map[x[1],x[2]]<map[i,j])
+  v <- apply(coord_to_check,1,function(x)map[x[1],x[2]])
+  if(all(!w)){
+    return(which(coords[,1]==i&coords[,2]==j))
+  }else{
+    b <- whichBasin(coord_to_check[which.min(v),1],coord_to_check[which.min(v),2])
+    return(b)
+  }
+}
+for(i in 1:nrow(map)){
+  for(j in 1:ncol(map)){
+    mapBasin[i,j] <- whichBasin(i,j)
+  }
+}
+by_basin <- sapply(split(map,mapBasin),length)
+prod(tail(sort(by_basin),3))
+#1600104
