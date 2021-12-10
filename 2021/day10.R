@@ -26,3 +26,4 @@ g <- function(i){
 input2 <- input[sapply(s,length)==0]
 r <- sapply(input2,g)
 median(r)
+#3103006161
