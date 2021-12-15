@@ -67,3 +67,10 @@ g <- as.directed(make_lattice(c(nrow(MAP), ncol(MAP))),mode = 'mutual')
 E(g)$weight <- MAP[get.edgelist(g)[, 2]]
 distances(g,"1",nrow(MAP)*ncol(MAP),mode="out")
 #2879
+
+#Visualization
+par(mar=c(0,0,0,0))
+image(seq_len(500),seq_len(500),MAP,col=rev(hcl.colors(9,"ag_GrnYl")),ylim=c(nrow(MAP),1))
+path <- matrix(NA,nrow=500,ncol=500)
+path[as.integer(el(shortest_paths(g,"1",nrow(MAP)*ncol(MAP),mode="out")$vpath))]<-1
+image(seq_len(500),seq_len(500),path,breaks=c(0,1),col=c("black"),add=TRUE)
