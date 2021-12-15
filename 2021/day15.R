@@ -1,3 +1,4 @@
+library(igraph)
 map <- apply(do.call(rbind,strsplit(readLines("input15.txt"),"")),2,as.integer)
 all_coords <- expand.grid(1:100,1:100)
 neighbours <- function(x){
@@ -14,6 +15,55 @@ neighbours <- function(x){
   res
 }
 nb <- do.call(rbind,apply(all_coords,1,neighbours))
-nodes <- seq_len(nrow(coords))
 g <- graph_from_edgelist(as.matrix(nb[,1:2]))
-distances(g,1,10000,weights=g$value,algorithm="dijkstra")
+distances(g,"1",nrow(map)*ncol(map),weights=nb$value,mode="out")
+#540
+
+MAP <- matrix(NA,nrow=500,ncol=500)
+# I know, I know, it's insanely ugly :)
+MAP[1:100,1:100]<-map
+m <- map+1
+m[m==10]<-1
+MAP[101:200,1:100]<-m
+MAP[1:100,101:200]<-m
+m <- m+1
+m[m==10]<-1
+MAP[201:300,1:100]<-m
+MAP[101:200,101:200]<-m
+MAP[1:100,201:300]<-m
+m <- m+1
+m[m==10]<-1
+MAP[301:400,1:100]<-m
+MAP[201:300,101:200]<-m
+MAP[101:200,201:300]<-m
+MAP[1:100,301:400]<-m
+m <- m+1
+m[m==10]<-1
+MAP[401:500,1:100]<-m
+MAP[301:400,101:200]<-m
+MAP[201:300,201:300]<-m
+MAP[101:200,301:400]<-m
+MAP[1:100,401:500]<-m
+m <- m+1
+m[m==10]<-1
+MAP[401:500,101:200]<-m
+MAP[301:400,201:300]<-m
+MAP[201:300,301:400]<-m
+MAP[101:200,401:500]<-m
+m <- m+1
+m[m==10]<-1
+MAP[401:500,201:300]<-m
+MAP[301:400,301:400]<-m
+MAP[201:300,401:500]<-m
+m <- m+1
+m[m==10]<-1
+MAP[401:500,301:400]<-m
+MAP[301:400,401:500]<-m
+m <- m+1
+m[m==10]<-1
+MAP[401:500,401:500]<-m
+
+g <- as.directed(make_lattice(c(nrow(MAP), ncol(MAP))),mode = 'mutual')
+E(g)$weight <- MAP[get.edgelist(g)[, 2]]
+distances(g,"1",nrow(MAP)*ncol(MAP),mode="out")
+#2879
