@@ -17,7 +17,7 @@ neighbours <- function(x){
 nb <- do.call(rbind,apply(all_coords,1,neighbours))
 g <- graph_from_edgelist(as.matrix(nb[,1:2]))
 E(g)$weight <- nb$value
-distances(g,"1",nrow(map)*ncol(map),mode="out")
+distances(g,1,nrow(map)*ncol(map),mode="out")
 #540
 
 MAP <- matrix(NA,nrow=500,ncol=500)
