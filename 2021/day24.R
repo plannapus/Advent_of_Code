@@ -1,49 +1,5 @@
 input <-readLines("input24.txt")
-# input <- strsplit(input," ")
-# monad <- function(inst, number){
-#   number <- as.integer(el(strsplit(as.character(number),"")))
-#   w <- x <- y <- z <- 0
-#   for(i in seq_along(inst)){
-#     if(inst[[i]][1]=="inp"){
-#       assign(inst[[i]][2],head(number,1))
-#       number <- number[-1]
-#     }else{
-#       if(grepl("[w-z]",inst[[i]][3])){
-#         b <- get(inst[[i]][3])
-#       }else{
-#         b <- as.integer(inst[[i]][3])
-#       }
-#       if(inst[[i]][1]=="add"){
-#         assign(inst[[i]][2],get(inst[[i]][2]) + b)
-#       }
-#       if(inst[[i]][1]=="mul"){
-#         assign(inst[[i]][2],get(inst[[i]][2]) * b)
-#       }
-#       if(inst[[i]][1]=="div"){
-#         assign(inst[[i]][2],get(inst[[i]][2]) %/% b)
-#       }
-#       if(inst[[i]][1]=="mod"){
-#         assign(inst[[i]][2],get(inst[[i]][2]) %% b)
-#       }
-#       if(inst[[i]][1]=="eql"){
-#         assign(inst[[i]][2],as.integer(get(inst[[i]][2]) == b))
-#       }
-#     }
-#   }
-#   c(w,x,y,z)
-# }
-# nb <- 99999999999999
-# options(digits=22)
-# repeat{
-#   nb <- nb-1
-#   while(grepl("0",as.character(nb))){
-#     nb <- nb-1
-#   }
-#   res <- monad(input,nb)
-#   if(res[4]==0) break
-#   if(!nb%%999)cat(nb,"\r")
-# }
-# cat("\ņ",nb)
+
 b <- as.integer(gsub("add x (.+)$","\\1",grep("add x -?[0-9]+",input,v=TRUE)))
 d26 <- as.integer(gsub("div z (.+)$","\\1",grep("div z [0-9]+",input,v=TRUE)))==26
 a <- as.integer(gsub("add y (.+)$","\\1",grep("add y -?[0-9]+",input,v=TRUE)))
@@ -73,6 +29,5 @@ dps <- function(i,z){
   res
 }
 r <- dps(1,0)
-options(digits=22)
-max(as.integer(r)) #99598963999971
-min(as.integer(r)) #93151411711211
+head(r,1) #99598963999971
+tail(r,1) #93151411711211
