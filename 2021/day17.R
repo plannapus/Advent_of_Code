@@ -37,7 +37,7 @@ for(i in 1:nrow(test)){
       if(is_target(x0,y0)) break
     }
     it[i] <- is_target(x0,y0)
-    if(!i%%100)cat(i,"\r")
+    if(!i%%1000)cat(i,"\r")
 }
 on_target <- test[it,]
 max(apply(on_target,1,function(x)max_height(x[1],x[2])))
@@ -58,7 +58,7 @@ for(i in 1:nrow(test)){
     if(is_target(x0,y0)) break
   }
   it[i] <- is_target(x0,y0)
-  if(!i%%100)cat(i,"\r")
+  if(!i%%1000)cat(i,"\r")
 }
 sum(it)
 #5644
