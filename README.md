@@ -1,3 +1,9 @@
+### 2022
+
+https://adventofcode.com/2022
+
+![](2022/screenshot.png)
+
 ### 2021
 
 https://adventofcode.com/2021
