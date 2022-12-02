@@ -10,3 +10,9 @@ whatplayed <- apply(input,1,function(x)switch(x[1],"A"=switch(x[2],"X"=3,"Y"=1,"
                                           "C"=switch(x[2],"X"=2,"Y"=3,"Z"=1)))
 sum(whatplayed+sapply(input[,2],function(x)switch(x,"X"=0,"Y"=3,"Z"=6)))
 #10560
+
+
+#Alternative
+input <-readLines("input02.txt")
+sum(table(input)*c(4,8,3,1,5,9,7,2,6))
+sum(table(input)*c(3,4,8,1,5,9,2,6,7))
