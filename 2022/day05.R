@@ -15,18 +15,8 @@ for(i in 1:ncol(mat)){
 stacks2 <- stacks
 
 # Parse the instructions
-# Classic function to extract Perl-style named group in regex.
-parse.one <- function(res, result) { #old faithful (from regexpr help file)
-  m <- do.call(rbind, lapply(seq_along(res), function(i) {
-    if(result[i] == -1) return("")
-    st <- attr(result, "capture.start")[i, ]
-    substring(res[i], st, st + attr(result, "capture.length")[i, ] - 1)
-  }))
-  colnames(m) <- attr(result, "capture.names")
-  m
-}
-parsed <- regexpr("^move (?<n>[0-9]+) from (?<from>[0-9]+) to (?<to>[0-9]+)$", input[w:length(input)], perl=TRUE)
-inst <- parse.one(input[w:length(input)],parsed)
+# parse.group is defined in a separate file as i tend to use it a lot
+inst <- parse.group("^move (?<n>[0-9]+) from (?<from>[0-9]+) to (?<to>[0-9]+)$", input[w:length(input)])
 inst <- as.data.frame(apply(inst,2,as.integer))
 
 # Part 1
