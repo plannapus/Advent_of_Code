@@ -2,8 +2,9 @@
 input <- readLines("input05.txt")
 # Figure out where the instructions begin
 w <- grep("move",input)[1]
+m <- max(as.integer(el(strsplit(input[w-2],""))),na.rm=TRUE)
 # Read the crate stacks as a fixed width table
-mat <- read.fwf(file="input05.txt",widths=rep(4,9),n=(w-3))
+mat <- read.fwf(file="input05.txt",widths=rep(4,m),n=(w-3))
 # Get rid of non integer characters and clean up
 mat <- apply(mat,2,\(x)gsub("[][ ]","",x))
 stacks <- list()
