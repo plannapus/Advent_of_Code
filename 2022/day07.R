@@ -57,3 +57,9 @@ sum(allsizes[allsizes<100000])
 target<-30000000-(70000000-allsizes[1]) #Extra space needed
 sort(allsizes[allsizes>=target])[1]
 #404395
+
+
+##Visualization
+library(data.tree)
+dt <- FromListSimple(tree)
+plot(dt)
