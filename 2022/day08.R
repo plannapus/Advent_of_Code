@@ -54,3 +54,22 @@ for(i in 2:(nrow(input)-1)){
 max(map2)
 #671160
 
+### Visualization
+png("plot_day08.png",h=400,w=1060)
+par(mfcol=c(1,3))
+par(mar=c(0,0,5,0))
+image(input,col=rev(hcl.colors(10,"ag_GrnYl")),ax=F,ann=F,asp=1)
+box(lwd=3)
+title("Tree Height")
+
+par(mar=c(0,0,5,0))
+image(map,col=c("white","black"),ax=F,ann=F,asp=1)
+box(lwd=3)
+title("Tree Visibility")
+
+par(mar=c(0,0,5,0))
+image(1:99,1:99,log(map2),col=rev(hcl.colors(10,"ag_GrnYl")),ax=F,ann=F,asp=1)
+points(48,79,pch=15,col="red")
+box(lwd=3)
+title("Tree Scenic Score (Log)")
+dev.off()
