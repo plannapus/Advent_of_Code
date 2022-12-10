@@ -8,3 +8,6 @@ https://adventofcode.com/2022
 
 ### Day 7: No Space Left On Device
 ![](plot_day07.png)
+
+### Day 8: Treetop Tree House
+![](plot_day08.png)
