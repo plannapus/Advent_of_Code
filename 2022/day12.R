@@ -13,7 +13,6 @@ nb <- function(x,y){
     w <- which(letters==map[x,y])
     l <- apply(coords,1,function(z)which(letters==map[z[1],z[2]]))
     coords <- coords[l-w<=1,,drop=FALSE]
-    l <- l[l-w<=1]
     if(nrow(coords)){
       ids <- apply(coords,1,function(z)which(all_coords[,1]==z[1]&all_coords[,2]==z[2]))
       id <- which(all_coords[,1]==x&all_coords[,2]==y)
@@ -24,7 +23,6 @@ library(igraph)
 X <- apply(all_coords,1,function(x)nb(x[1],x[2]))
 edg <- do.call(rbind,X)
 g <- graph_from_edgelist(as.matrix(edg[,1:2]))
-#E(g)$weight <- edg$value
 distances(g,
           which(all_coords[,1]==start[1]&all_coords[,2]==start[2]),
           which(all_coords[,1]==end[1]&all_coords[,2]==end[2]),mode="out")
