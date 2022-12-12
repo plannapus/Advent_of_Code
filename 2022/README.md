@@ -11,3 +11,6 @@ https://adventofcode.com/2022
 
 ### Day 8: Treetop Tree House
 ![](plot_day08.png)
+
+### Day 12: Hill Climbing Algorithm
+![](plot_day12a.png)![](plot_day12b.png)
