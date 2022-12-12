@@ -20,9 +20,8 @@ nb <- function(x,y){
     }else{return(NULL)}
 }
 library(igraph)
-X <- apply(all_coords,1,function(x)nb(x[1],x[2]))
-edg <- do.call(rbind,X)
-g <- graph_from_edgelist(as.matrix(edg[,1:2]))
+edg <- do.call(rbind,apply(all_coords,1,function(x)nb(x[1],x[2])))
+g <- graph_from_edgelist(as.matrix(edg)) #Make a directed graph with list of possible paths
 distances(g,
           which(all_coords[,1]==start[1]&all_coords[,2]==start[2]),
           which(all_coords[,1]==end[1]&all_coords[,2]==end[2]),mode="out")
@@ -35,3 +34,27 @@ d<-distances(g,
           which(all_coords[,1]==end[1]&all_coords[,2]==end[2]),mode="out")
 min(d)
 #388
+
+
+#Visualization
+png("plot_day12a.png",h=1045,w=550)
+par(mar=c(0,0,0,0))
+image(1:nrow(map),1:ncol(map),map2,asp=1,breaks=0:26,col=hcl.colors(26,"ag_GrnYl"))
+text(start[1],start[2],"S")
+text(end[1],end[2],"E")
+s <- shortest_paths(g,
+               which(all_coords[,1]==start[1]&all_coords[,2]==start[2]),
+               which(all_coords[,1]==end[1]&all_coords[,2]==end[2]),mode="out")
+points(all_coords[el(s$vp),],cex=0.5,pch=15)
+dev.off()
+
+png("plot_day12b.png",h=1045,w=550)
+par(mar=c(0,0,0,0))
+image(1:nrow(map),1:ncol(map),map2,asp=1,breaks=0:26,col=hcl.colors(26,"ag_GrnYl"))
+text(start[1],start[2],"S")
+text(end[1],end[2],"E")
+s <- shortest_paths(g,
+               sp[which.min(d)],
+               which(all_coords[,1]==end[1]&all_coords[,2]==end[2]),mode="out")
+points(all_coords[el(s$vp),],cex=0.5,pch=15,col="red")
+dev.off()
