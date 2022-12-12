@@ -7,10 +7,10 @@ https://adventofcode.com/2022
 ## Visualizations
 
 ### Day 7: No Space Left On Device
-![](plot_day07.png)
+![](visualizations/plot_day07.png)
 
 ### Day 8: Treetop Tree House
-![](plot_day08.png)
+![](visualizations/plot_day08.png)
 
 ### Day 12: Hill Climbing Algorithm
-![](plot_day12a.png)![](plot_day12b.png)
+![](visualizations/plot_day12a.png)![](visualizations/plot_day12b.png)
