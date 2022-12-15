@@ -14,33 +14,46 @@ for(i in 1:nrow(coord)){
 length(u[!u%in%coord$bx[coord$by==rowy]])
 #5832528
 
-##Second part, does not work yet:
+##Second part:
 M <- 4000000
 yr <- list()
 for(i in 0:M) yr[[i+1]]<-matrix(ncol=2,nrow=0)
 
-for(i in 1:nrow(coord)){
+for(i in 1:nrow(coord)){ #For each y, make matrix of x ranges reached by each sensor
  for(k in 0:coord$manh[i]){
    xm <- pmax(0,coord$sx[i]-k)
    xM <- pmin(M,coord$sx[i]+k)
-   if(coord$sy[i]-k>=0){
-     yr[[coord$sy[i]-k+1]]<-rbind(yr[[coord$sy[i]-k+1]],c(xm,xM))
+   dk <- coord$manh[i]-k
+   if(coord$sy[i]-dk>=0){
+     yr[[coord$sy[i]-dk+1]]<-rbind(yr[[coord$sy[i]-dk+1]],c(xm,xM))
    }
-   if(coord$sy[i]+k<=M){
-     yr[[coord$sy[i]+k+1]]<-rbind(yr[[coord$sy[i]+k+1]],c(xm,xM))
+   if(coord$sy[i]+dk<=M){
+     yr[[coord$sy[i]+dk+1]]<-rbind(yr[[coord$sy[i]+dk+1]],c(xm,xM))
    }
    if(!k%%10000)cat(i,":",k,"\r")
  }
 }
 
-v <- 0:M
-for(k in v){
+for(k in 0:M){
   Y <- yr[[k+1]]
-  M <- apply(Y,1,function(x)v<x[1]|v>x[2])
-  N <- colSums(M)
-  if(any(N==0)){
-    x <- which(N==0)+1
-    stop(x*M+k)
+  Y <- Y[order(Y[,1]),] #Order the matrix of ranges covered by each sensors at y=k
+  j <- 1
+  while(j<nrow(Y)){ #Getting rid of ranges fully included in previous one
+    w <- c(rep(FALSE,j),Y[(j+1):nrow(Y),2]<Y[j,2])
+    Y <- Y[!w,]
+    j <- j+1
   }
-  if(!k%%100)cat(k,"\r")
+  j <-1
+  while(j<nrow(Y)){ # Merging overlapping ranges
+    if(Y[j+1,1]<=Y[j,2]){
+      Y[j,2] <- Y[j+1,2]
+      Y <- Y[-(j+1),,drop=FALSE]
+    }else{ #If two subsequent ranges don t overlap, then we found the sot
+      stop((Y[j,2]+1)*M+k)
+    }
+  }
+  if(!k%%1000)cat(k,"\r") #Step counter
 }
+#13360899249595
+#y=3249595
+#x=3340224
