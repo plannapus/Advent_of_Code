@@ -1,7 +1,6 @@
 input <- readLines("input14.txt")
 input <- lapply(strsplit(input," -> "),
        function(x)apply(do.call(rbind,strsplit(x,",")),2,as.integer))
-min(sapply(input,function(x)min(x[,2])))
 map <- matrix(0,ncol=600,nrow=200)
 for(i in seq_along(input)){
   for(j in 2:nrow(input[[i]])){
