@@ -1,4 +1,5 @@
-input <- readLines("test16.txt")
+input <- readLines("input16.txt")
+source("parse.group.R")
 input <- as.data.frame(parse.group("Valve (?<v>[A-Z]+) has flow rate=(?<f>[0-9]+); tunnels? leads? to valves? (?<l>[ ,A-Z]+)",input))
 input$f <- as.integer(input$f)
 P <- strsplit(input$l,", ")
@@ -8,66 +9,77 @@ for(i in seq_along(P)){
 }
 library(igraph)
 g<-graph_from_edgelist(edg)
-#sp <- all_simple_paths(g,from="AA") #<-Does not work because do not allow loops
+D <- distances(g,input$v,input$v)
 
-flow<-function(path){ #<-find 1712 for example!
-  i<-1
-  totflow <- 0
-  time <- 0
-  opened <- c()
-  for(i in seq_along(path)){
-    if(input$f[input$v%in%path[i]]>0&!path[i]%in%opened){
-      #First turn on valve
-      opened <- c(opened, path[i])
-      totflow <- totflow+(30-time)*input$f[input$v==path[i]]
-      time <- time+2
+search <- function(t,from="AA",v=input$v[input$f!=0]){
+  res <- c()
+  for(i in seq_along(v)){
+    if(D[from,v[i]]<t){
+      res[i] <- input$f[input$v==v[i]] * (t-D[from,v[i]]-1)
+      if(length(v[-i])) res[i] <- res[i]+search(t-D[from,v[i]]-1,v[i],v[-i])
     }else{
-      #Just move
-      time <- time+1
+      res[i]<-0
     }
   }
-  return(list(totflow=totflow,time=time,opened=opened))
+  return(max(res,na.rm=TRUE))
 }
 
-step <- function(from,path){
-  path <- c(path,from)
-  fl <- flow(path)
-  time <- fl$time
-  if(time>=30){
-    return(list(fl$totflow,path))
-  }
-  if(length(fl$opened)>5){
-    return(list(fl$totflow,path))
-  }
-  nextstep <- P[[which(input$v==from)]]
-  st <- list()
-  for(i in seq_along(nextstep)){
-    st[[i]] <- step(nextstep[i],path)
-  }
-  return(st[[which.max(sapply(st,`[`,1))]])
-}
+search(30)
+#2119
 
-step("AA",c())
-
-# step <- function(opened, time, current){ #Does not work either!!!
-#   if(time<=0) return(0)
-#   best <- 0
-#   if(!current %in% opened){
-#     flow <- (time-1)*input$f[input$v==current]
-#     opened <- c(opened, current)
-#     for(nextstep in P[[which(input$v==current)]]){
-#       if(flow!=0){
-#         best <- pmax(best, flow + step(opened, time - 2, nextstep))
-#       }else{
-#         best <- pmax(best, step(opened, time - 1, nextstep))
-#       }
+# search2 <- function(t1,t2,from1="AA",from2="AA",v=input$v[input$f!=0]){
+#   if(length(v)==1){
+#     if(D[from1,v[i]]<t1 & D[from1,v[i]]<D[from2,v[i]]){
+#       res <- input$f[input$v==v[i]] * (t1-D[from1,v[i]]-1)
+#     }else if(D[from2,v[i]]<t2){
+#       res <- input$f[input$v==v[i]] * (t2-D[from2,v[i]]-1)
+#     }else if(D[from1,v[i]]<t1){
+#       res <- input$f[input$v==v[i]] * (t1-D[from1,v[i]]-1)
+#     }else{
+#       res <- 0
 #     }
 #   }else{
-#     for(nextstep in P[[which(input$v==current)]]){
-#       best <- pmax(best, step(opened, time - 1, nextstep))
+#     res <- matrix(0,nrow=length(v),ncol=length(v))
+#     for(i in seq_along(v)){
+#       for(j in seq_along(v)[-i]){
+#         if(D[from1,v[i]]<t1 & D[from2,v[j]]<t2){
+#           res[i,j] <- input$f[input$v==v[i]] * (t1-D[from1,v[i]]-1) +
+#             input$f[input$v==v[j]] * (t2-D[from2,v[j]]-1)
+#           if(length(v[-c(i,j)])){
+#             res[i,j] <- res[i,j]+search2(t1-D[from1,v[i]]-1,
+#                                          t2-D[from1,v[j]]-1,
+#                                          v[i],v[j],v[-c(i,j)])
+#           }
+#         }else if(D[from1,v[i]]<t1 & D[from2,v[j]]>t2){
+#           res[i,j] <- input$f[input$v==v[i]] * (t1-D[from1,v[i]]-1)
+#           if(length(v[-i])){
+#             res[i,j] <- res[i,j]+search2(t1-D[from1,v[i]]-1,
+#                                          t2,
+#                                          v[i],from2,v[-i])
+#           }
+#         }else if(D[from1,v[i]]>=t1 & D[from2,v[j]]<t2){
+#           res[i,j] <- input$f[input$v==v[j]] * (t2-D[from2,v[j]]-1)
+#           if(length(v[-j])){
+#             res[i,j] <- res[i,j]+search2(t1,
+#                                          t2-D[from2,v[j]]-1,
+#                                          from1,v[j],v[-j])
+#           }
+#         }
+#       }
 #     }
 #   }
-#   return(best)
+#   return(max(res,na.rm=TRUE))
 # }
 # 
-# step(c(),30,"AA")
+# search2(26,26)
+
+flow <- function(path, time){
+  current <- "AA"
+  res <- 0
+  for(i in path){
+    time <- time - D[current,i] -1
+    res <- res + input$f[input$v==i]*time
+    current <- i
+  }
+  res
+}
