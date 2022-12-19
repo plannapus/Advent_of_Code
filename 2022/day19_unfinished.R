@@ -20,7 +20,7 @@ for(i in 1:nrow(input)){
     }else if(any(queue$t==23 & queue$gebot==0)){
       queue <- queue[!(queue$t==23 & queue$gebot==0),,drop=FALSE]
     }else if(any(apply(queue,1,function(x)x[5]+x[9]*(24-(x[1]+1))+sum(24:(x[1]+1))) < res[i] )){
-      queue <- queue[any(apply(queue,1,function(x)x[5]+x[9]*(24-(x[1]+1))+sum(24:(x[1]+1))) >= res[i] ),]
+      queue <- queue[any(apply(queue,1,function(x)x[5]+x[9]*(24-(x[1]+1))+sum(24:(x[1]+1))) >= res[i] ),,drop=FALSE]
     }else{
       state <- queue[1,]
       queue <- queue[-1,,drop=FALSE]
@@ -30,25 +30,23 @@ for(i in 1:nrow(input)){
       state$ge <- state$ge+state$gebot
       state$t <- state$t + 1
       if(state$or>=input$or_ge[i] & state$ob>=input$ob_ge[i]){
-        state3 <- state
-        state3$or <- state3$or - input$or_ge[i]
-        state3$ob <- state3$ob - input$ob_ge[i]
-        state3$gebot <- state3$gebot + 1
-        queue <- rbind(state3,queue)
+        state$or <- state$or - input$or_ge[i]
+        state$ob <- state$ob - input$ob_ge[i]
+        state$gebot <- state$gebot + 1
+        queue <- rbind(state,queue)
       }else if(state$or>=input$or_ob[i] & state$cl>=input$cl_ob[i] & 
                state$obbot <= input$ob_ge[i]){
-        state3 <- state
-        state3$or <- state3$or - input$or_ob[i]
-        state3$cl <- state3$cl - input$cl_ob[i]
-        state3$obbot <- state3$obbot + 1
-        queue <- rbind(state3,queue)
+        state$or <- state$or - input$or_ob[i]
+        state$cl <- state$cl - input$cl_ob[i]
+        state$obbot <- state$obbot + 1
+        queue <- rbind(state,queue)
       }else{
         if(state$or>=input$or_or[i] & 
            state$orbot<=mo){
-          state3 <- state
-          state3$or <- state3$or - input$or_or[i]
-          state3$orbot <- state3$orbot + 1
-          queue <- rbind(queue,state3)
+          state2 <- state
+          state2$or <- state2$or - input$or_or[i]
+          state2$orbot <- state2$orbot + 1
+          queue <- rbind(queue,state2)
         }
         if(state$or>=input$or_cl[i]& 
            state$clbot <= input$cl_ob[i]){
@@ -59,12 +57,12 @@ for(i in 1:nrow(input)){
         }
         queue <- rbind(queue,state) #Case where nothing is done
       }
-      queue <- queue[!duplicated(queue),]
-      res[i] <- max(queue$ge)
+      queue <- queue[!duplicated(queue),,drop=FALSE]
+      res[i] <- max(c(res[i],queue$ge))
+      if(all(queue$t>=15)) queue <- queue[rev(order(queue$gebot,queue$obbot)),] #Switch to dfs
     }
     cat(nrow(queue),":",min(queue$t),"-",max(queue$t),":",res[i],"\r")
   }
 }
-#save(res,file="res.Rdata")
 cat(sum(res*input$n))
 
