@@ -42,20 +42,26 @@ for(i in 1:nrow(input)){
         queue <- rbind(state,queue)
       }else{
         if(state$or>=input$or_or[i] & 
+               state$orbot<=input$or_cl[i]){
+        state2 <- state
+        state2$or <- state2$or - input$or_or[i]
+        state2$orbot <- state2$orbot + 1
+        queue <- rbind(queue,state2)
+      }else if(state$or>=input$or_cl[i]& 
+               state$clbot <= input$cl_ob[i]){
+        state3 <- state
+        state3$or <- state3$or - input$or_cl[i]
+        state3$clbot <- state3$clbot + 1
+        queue <- rbind(queue,state3)
+      }else if(state$or>=input$or_or[i] & 
            state$orbot<=mo){
           state2 <- state
           state2$or <- state2$or - input$or_or[i]
           state2$orbot <- state2$orbot + 1
           queue <- rbind(queue,state2)
-        }
-        if(state$or>=input$or_cl[i]& 
-           state$clbot <= input$cl_ob[i]){
-          state3 <- state
-          state3$or <- state3$or - input$or_cl[i]
-          state3$clbot <- state3$clbot + 1
-          queue <- rbind(queue,state3)
-        }
+      }else{
         queue <- rbind(queue,state) #Case where nothing is done
+      }
       }
       queue <- queue[!duplicated(queue),,drop=FALSE]
       res[i] <- max(c(res[i],queue$ge))
