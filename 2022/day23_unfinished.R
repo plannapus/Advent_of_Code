@@ -71,7 +71,7 @@ while(TRUE){
         }
       }
     }
-    if(!j%%10)cat(i,":",j,"\r")
+    if(!j%%10)cat(i,":",round(100*j/nrow(pos),1),"%\r")
   }
   if(anyDuplicated(new)){
     new[duplicated(new)|duplicated(new,fromLast=TRUE)] <- pos[duplicated(new)|duplicated(new,fromLast=TRUE)]
@@ -80,3 +80,4 @@ while(TRUE){
   pos <- new
   dir <- dir[c(2:4,1),]
 }
+#1069
