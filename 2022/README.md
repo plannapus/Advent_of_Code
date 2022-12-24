@@ -14,3 +14,6 @@ https://adventofcode.com/2022
 
 ### Day 12: Hill Climbing Algorithm
 ![](visualizations/plot_day12a.png)![](visualizations/plot_day12b.png)
+
+### Day 22: Monkey Map
+![](cube_day22.png)

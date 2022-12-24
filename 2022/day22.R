@@ -175,8 +175,7 @@ correct_dice <- function(loc,new,d){
   if(map[new[1],new[2]]==" ") stop()
   return(list(new=new,d=d))
 }
-path <- cbind(rep(NA,4002),rep(NA,4002))
-path[1,]<-loc
+path <- loc
 options(warn=-1)
 for(i in seq_along(inst)){
   if(!is.na(as.integer(inst[i]))){
@@ -186,8 +185,11 @@ for(i in seq_along(inst)){
       new <- loc+incr
       NEW <- correct_dice(loc,new,d)
       new <- NEW$new
-      d <- NEW$d
-      if(map[new[1],new[2]]==".") loc <- new
+      if(map[new[1],new[2]]=="."){
+        d <- NEW$d
+        loc <- new
+        path <- rbind(path,loc)
+      }
     }
   }else{
     if(inst[i]=="R"){
@@ -198,9 +200,9 @@ for(i in seq_along(inst)){
       d <- dirs[which(dirs==d)[1]+1]
     }
   }
-  path[i+1,]<-loc
+  #path[i+1,]<-loc
   cat(i,":",loc[1],"-",loc[2],"\n")
 }
 
 loc[1]*1000+loc[2]*4+switch(d,"<"=2,"^"=3,">"=0,"v"=1)
-#115106 #<-Incorrect!
+#153203 #<-Incorrect!
