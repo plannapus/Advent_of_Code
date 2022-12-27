@@ -46,7 +46,7 @@ for(i in seq_along(inst)){
 loc[1]*1000+loc[2]*4+switch(d,"<"=2,"^"=3,">"=0,"v"=1)
 #149138
 
-### Part 2 in progress
+### Part 2
 map_dice <- matrix(0,ncol=150,nrow=200)
 map_dice[1:50,51:100]<-1
 map_dice[1:50,101:150]<-2
@@ -205,4 +205,4 @@ for(i in seq_along(inst)){
 }
 
 loc[1]*1000+loc[2]*4+switch(d,"<"=2,"^"=3,">"=0,"v"=1)
-#153203 #<-Incorrect!
+#153203
