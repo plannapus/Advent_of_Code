@@ -2,7 +2,7 @@
 
 https://adventofcode.com/2022
 
-![](screenshot_2022.png)
+![](screenshot.png)
 
 ## Visualizations
 
