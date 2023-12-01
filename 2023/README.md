@@ -2,6 +2,6 @@
 
 https://adventofcode.com/2023
 
-<!-- ![](screenshot.png) -->
+![](screenshot.png)
 
 <!-- ## Visualizations -->
