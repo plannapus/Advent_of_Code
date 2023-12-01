@@ -4,7 +4,7 @@ g <- gsub("[^0-9]","",input)
 s <- sapply(g,\(x)paste0(substr(x,1,1),substr(x,nchar(x),nchar(x))))
 sum(as.integer(s))
 #54338
-
+df <- c("one","two","three","four","five","six","seven","eight","nine")
 f <- function(x){
   n <- c()
   for(i in 1:nchar(x)){
