@@ -3,5 +3,5 @@ read.input <- function(day){
   cookie <- readLines("session.txt",warn=FALSE)
   g <- GET(sprintf("http://adventofcode.com/2023/day/%s/input",day),
            set_cookies("session"=cookie))
-  content(g,as="text")
+  textConnection(content(g,as="text"))
 }

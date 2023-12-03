@@ -6,5 +6,5 @@ parse.group <- function(regex,input) { #old faithful (from regexpr help file)
     substring(input[i], st, st + attr(result, "capture.length")[i, ] - 1)
   }))
   colnames(m) <- attr(result, "capture.names")
-  m
+  as.data.frame(m)
 }

@@ -1,4 +1,5 @@
-input <- readLines("input01.txt")
+#input <- readLines("input01.txt")
+input <- readLines(read.input(1))
 #input <- readLines("test01.txt")
 g <- gsub("[^0-9]","",input)
 s <- sapply(g,\(x)paste0(substr(x,1,1),substr(x,nchar(x),nchar(x))))
