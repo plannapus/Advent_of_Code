@@ -82,7 +82,6 @@ min(locs)
 #196167384
 
 seeds2 <- matrix(seeds,ncol=2,byrow=TRUE)
-so <- fe <- wa <- li <- te <- hu <- locs <- c()
 ranges <- cbind(seeds2[,1],seeds2[,1]+seeds2[,2]-1)
 
 #srRe X
