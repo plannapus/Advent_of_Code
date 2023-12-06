@@ -473,6 +473,33 @@ max(pr)
 # 11171160
 
 # Day 16
+input <- readLines("input/2015_input16.txt")
+res <- c(children= 3,
+         cats= 7,
+         samoyeds= 2,
+         pomeranians= 3,
+         akitas= 0,
+         vizslas= 0,
+         goldfish= 5,
+         trees= 3,
+         cars= 2,
+         perfumes= 1)
+sues <- lapply(strsplit(gsub("Sue [0-9]+: ","",input),", "),\(x){
+  s <- do.call(rbind,strsplit(x,": "))
+  s <- as.data.frame(s)
+  s[,2] <- as.integer(s[,2])
+  s
+})
+which(sapply(sues,\(x)all(res[x[,1]]==x[,2])))
+#373
+
+res <- as.list(res)
+res$cats <- (res$cats+1):10
+res$trees <- (res$trees+1):10
+res$pomeranians <- 0:(res$pomeranians-1)
+res$goldfish <-  0:(res$goldfish-1)
+which(sapply(sues,\(x)all(apply(x,1,\(y)y[2]%in%res[y[1]][[1]]))))
+#260
 
 # Day 17
 input <- scan("input/2015_input17.txt")
@@ -489,10 +516,41 @@ s <- sapply(seq_along(pos),function(x)ifelse(!is.null(pos[[x]]), ifelse(ncol(pos
 s[!is.na(s)][1]
 # 17
 
-
 # Day 18
 
 # Day 19
+## Part 1
+input <- readLines("input/2015_input19.txt")
+mol <- input[45]
+transf <- do.call(rbind,strsplit(input[1:43]," => "))
+w <- which(strsplit(mol,"")[[1]]%in%LETTERS)
+newmol <- c()
+for(i in seq_along(w)){
+  if(i==length(w)){
+    wj <- nchar(mol)
+  }else{
+    wj <- w[i+1]-1
+  }
+  s <- substr(mol,w[i],wj)
+  if(s%in%transf[,1]){
+    if(i==1){
+      nm <- paste0(transf[transf[,1]==s,2],
+                   substr(mol,wj+1,nchar(mol)))
+    }else if(i==length(w)){
+      nm <- paste0(substr(mol,1,w[i]-1),
+                   transf[transf[,1]==s,2])
+    }else{
+      nm <- paste0(substr(mol,1,w[i]-1),
+                   transf[transf[,1]==s,2],
+                   substr(mol,wj+1,nchar(mol)))
+    }
+    newmol <- c(newmol,nm)
+  }
+}
+length(unique(newmol))
+#518
+
+## Part 2
 
 # Day 20 (unfinished)
 input <- 29000000
@@ -504,3 +562,14 @@ for(i in 1:1e6){
   if(!i%%1000)cat(i,":",max(houses),"\r")
 }
 which(houses>=input)
+
+
+# Day 21
+
+# Day 22
+
+# Day 23
+
+# Day 24
+
+# Day 25
