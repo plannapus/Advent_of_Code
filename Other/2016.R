@@ -182,3 +182,261 @@ step4 <- sapply(step3,\(x)any(grepl("(.)((?!\\1).)\\2\\1",x,perl=TRUE)))
 sum(step2 & !step4)
 #115
 
+# Day 8
+## Part 1
+input <- readLines(read.input(2016,8))
+screen <- matrix(FALSE,ncol=50,nrow=6)
+for(i in seq_along(input)){
+  nb <- as.integer(regmatches(input[i],gregexpr("[0-9]+",input[i]))[[1]])
+  if(grepl("rect",input[i])){
+    screen[1:nb[2],1:nb[1]] <- TRUE
+  }
+  if(grepl("rotate row",input[i])){
+    o <- screen[nb[1]+1,]
+    if(nb[2]>=ncol(screen)) nb[2] <- nb[2]%%ncol(screen)
+    if(nb[2]) screen[nb[1]+1,] <- c(o[(ncol(screen)-nb[2]+1):ncol(screen)],o[1:(ncol(screen)-nb[2])])
+  }
+  if(grepl("rotate column",input[i])){
+    o <- screen[,nb[1]+1]
+    if(nb[2]>=nrow(screen)) nb[2] <- nb[2]%%nrow(screen)
+    if(nb[2]) screen[,nb[1]+1] <- c(o[(nrow(screen)-nb[2]+1):nrow(screen)],o[1:(nrow(screen)-nb[2])])
+  }
+}
+sum(screen)
+#110
+
+## Part 2
+par(mar=c(0,0,0,0));image(1:50,1:6,t(screen),ylim=c(6,1))
+#ZJHRKCPLYJ
+
+# Day 9
+## Part 1
+input <- readLines(read.input(2016,9))[1]
+output <- ""
+i <- 1
+while(i<=nchar(input)){
+  s <- substr(input,i,i)
+  if(s %in% LETTERS){
+    output <- paste0(output,s)
+    i <- i+1
+  }else{
+    g <- gsub("^\\(([0-9]+x[0-9]+)\\).*$","\\1",substr(input,i,nchar(input)))
+    n <- as.integer(strsplit(g,"x")[[1]])
+    s <- paste(rep(substr(input,i+nchar(g)+2,i+nchar(g)+1+n[1]),n[2]),collapse="")
+    output <- paste0(output,s)
+    i <- i + nchar(g)+2+n[1]
+    }
+}
+nchar(output)
+#70186
+
+## Part 2
+i <- 1
+w <- rep(1,nchar(input))
+l <- 0
+while(i<=nchar(input)){
+  s <- substr(input,i,i)
+  if(s %in% LETTERS){
+    l <- l+w[i]
+    i <- i+1
+  }else{
+    g <- gsub("^\\(([0-9]+x[0-9]+)\\).*$","\\1",substr(input,i,nchar(input)))
+    n <- as.integer(strsplit(g,"x")[[1]])
+    w[(i+nchar(g)+2):(i+nchar(g)+1+n[1])] <- w[(i+nchar(g)+2):(i+nchar(g)+1+n[1])] * n[2]
+    i <- i + nchar(g)+2
+    }
+  cat(i,"\r")
+}
+l
+#10915059201
+
+# Day 10
+## Part 1
+input <- readLines(read.input(2016,10))
+bots <- outputs <- list()
+value <- input[grepl("^value",input)]
+comp <- input[grepl("^bot",input)]
+init <- parse.group("value (?<v>[0-9]+) goes to bot (?<n>[0-9]+)",value)
+comps <- parse.group("bot (?<b>[0-9]+) gives low to (?<lo>[a-z]+) (?<l>[0-9]+) and high to (?<ho>[a-z]+) (?<h>[0-9]+)",comp)
+init_bot <- init$n[duplicated(init$n)]
+for(i in 1:nrow(init)){
+  bots[[init$n[i]]] <- as.integer(init$v[init$n==init$n[i]])
+}
+while(nrow(comps)){
+  if(any(sapply(bots,length)==2)){
+    b <- names(bots[sapply(bots,length)==2])
+    for(i in seq_along(b)){
+      if(61%in%bots[[b[i]]] & 17%in%bots[[b[i]]]) cat("Values 61 and 17 in bot ",b[i],"\n")
+      co <- comps[comps$b==b[i],]
+      comps <- comps[comps$b!=b[i],]
+      bl <- co$l
+      bh <- co$h
+      if(co$lo=="bot"){
+        if(bl%in%names(bots)){
+          bots[[bl]] <- c(bots[[bl]], min(bots[[b[i]]]))
+        }else{
+          bots[[bl]] <- min(bots[[b[i]]])
+        }
+      }else{
+        outputs[[bl]] <- min(bots[[b[i]]])
+      }
+      if(co$ho=="bot"){
+        if(bh%in%names(bots)){
+          bots[[bh]] <- c(bots[[bh]], max(bots[[b[i]]]))
+        }else{
+          bots[[bh]] <- max(bots[[b[i]]])
+        } 
+      }else{
+        outputs[[bh]] <- max(bots[[b[i]]])
+      }
+      bots[[b[i]]] <- NULL
+    }
+  }else{
+    break
+  }
+}
+#47
+
+## Part 2
+outputs$`0`*outputs$`1`*outputs$`2`
+#2666
+
+# Day 12
+## Part 1
+reg <- list(a=0,b=0,c=0,d=0)
+input <- readLines(read.input(2016,12))
+i <- 1
+repeat{
+  inp <- input[i]
+  cat(inp,reg$a,reg$b,reg$c,reg$d,"\n",sep="\t",file="test.txt",append=TRUE)
+  if(grepl("^cpy",inp)){
+    s <- strsplit(inp," ")[[1]]
+    if(!is.na(as.integer(s[2]))){
+      reg[[s[3]]] <- as.integer(s[2])
+    }else{
+      reg[[s[3]]] <- reg[[s[2]]]
+    }
+    i <- i + 1
+  }
+  if(grepl("^inc",inp)){
+    s <- strsplit(inp," ")[[1]]
+    reg[[s[2]]] <- reg[[s[2]]] + 1
+    i <- i + 1
+  }
+  if(grepl("^dec",inp)){
+    s <- strsplit(inp," ")[[1]]
+    reg[[s[2]]] <- reg[[s[2]]] - 1
+    i <- i + 1
+  }
+  if(grepl("^jnz",inp)){
+    s <- strsplit(inp," ")[[1]]
+    if(!is.na(as.integer(s[2]))){
+      if(as.integer(s[2])){
+        i <- i + as.integer(s[3])
+      }else{
+        i <- i + 1
+      }
+    }else{
+      if(reg[[s[2]]]){
+        i <- i + as.integer(s[3])
+      }else{
+        i <- i+1
+      }
+    }
+  }
+  if(i>=length(input)) break
+}
+reg$a
+#318020
+
+## Part 2
+reg <- list(a=0,b=0,c=1,d=0)
+input <- readLines(read.input(2016,12))
+i <- 1
+repeat{
+  inp <- input[i]
+  cat(inp,reg$a,reg$b,reg$c,reg$d,"\n",sep="\t",file="test.txt",append=TRUE)
+  if(grepl("^cpy",inp)){
+    s <- strsplit(inp," ")[[1]]
+    if(!is.na(as.integer(s[2]))){
+      reg[[s[3]]] <- as.integer(s[2])
+    }else{
+      reg[[s[3]]] <- reg[[s[2]]]
+    }
+    i <- i + 1
+  }
+  if(grepl("^inc",inp)){
+    s <- strsplit(inp," ")[[1]]
+    reg[[s[2]]] <- reg[[s[2]]] + 1
+    i <- i + 1
+  }
+  if(grepl("^dec",inp)){
+    s <- strsplit(inp," ")[[1]]
+    reg[[s[2]]] <- reg[[s[2]]] - 1
+    i <- i + 1
+  }
+  if(grepl("^jnz",inp)){
+    s <- strsplit(inp," ")[[1]]
+    if(!is.na(as.integer(s[2]))){
+      if(as.integer(s[2])){
+        i <- i + as.integer(s[3])
+      }else{
+        i <- i + 1
+      }
+    }else{
+      if(reg[[s[2]]]){
+        i <- i + as.integer(s[3])
+      }else{
+        i <- i+1
+      }
+    }
+  }
+  if(i>=length(input)) break
+}
+reg$a
+#9227674
+
+# Day 13 (Unfinished)
+## Part 1
+f <- function(x,y) x^2+3*x+2*x*y+y+y^2+1352
+wo <- function(x,y){
+  n <- f(x,y)
+  !sum(intToBits(n)==1)%%2
+}
+map <- matrix(nr=50,nc=50)
+for(i in 1:50){
+  for(j in 1:50){
+    map[i,j] <- wo(i,j)
+  }
+}
+w <- which(map,arr.ind=T)
+W <- 1:nrow(w)
+edges <- data.frame(from=c(),to=c())
+for(i in seq_along(W)){
+  a <- w[i,]
+  if(any(w[,1]==a[1]+1&w[,2]==a[2])){
+    b <- W[w[,1]==a[1]+1&w[,2]==a[2]]
+    edges <- rbind(edges,data.frame(from=W[i],to=b))
+  }
+  if(any(w[,1]==a[1]-1&w[,2]==a[2])){
+    b <- W[w[,1]==a[1]-1&w[,2]==a[2]]
+    edges <- rbind(edges,data.frame(from=W[i],to=b))
+  }
+  if(any(w[,1]==a[1]&w[,2]==a[2]+1)){
+    b <- W[w[,1]==a[1]&w[,2]==a[2]+1]
+    edges <- rbind(edges,data.frame(from=W[i],to=b))
+  }
+  if(any(w[,1]==a[1]&w[,2]==a[2]-1)){
+    b <- W[w[,1]==a[1]&w[,2]==a[2]-1]
+    edges <- rbind(edges,data.frame(from=W[i],to=b))
+  }
+}
+W1 <- W[w[,1]==1&w[,2]==1]
+W2 <- W[w[,1]==31&w[,2]==39]
+edges <- apply(as.matrix(edges),2,as.character)
+library(igraph)
+g <- graph_from_data_frame(edges,directed=FALSE)
+distances(g,as.character(W1),as.character(W2))
+#90
+
+## Part 2
