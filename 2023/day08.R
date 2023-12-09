@@ -31,6 +31,7 @@ for(j in seq_along(pos)){
 }
 options(digits=22)
 res <- sapply(res,\(x)x[1])
+all(!res%%nchar(inst))
 for(i in 1:length(res)){
   if(i==1){
     lcm <- res[1]
