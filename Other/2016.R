@@ -440,3 +440,61 @@ distances(g,as.character(W1),as.character(W2))
 #90
 
 ## Part 2
+
+
+
+
+## Day 16
+# Part 1
+l <- 272
+input <- "11011110011011101"
+
+step <- function(x){
+  y <- chartr("01","10",paste(rev(strsplit(x,"")[[1]]),collapse=""))
+  paste0(x,"0",y)
+}
+check <- function(x,l){
+  n <- substr(x,1,l)
+  z <- ""
+  for(i in seq(1,l,2)){
+    s <- substr(n,i,i+1)
+    if(s%in%c("00","11")) z <- paste0(z,"1")
+    if(s%in%c("01","10")) z <- paste0(z,"0")
+    cat(i,"\r")
+  }
+  z
+}
+
+res <- input
+while(nchar(res)<l){
+    res <- step(res)
+}
+z <- check(res,l)
+while(!nchar(z)%%2){
+  res <- z
+  z <- check(res,l)
+}
+z
+#00000100100001100
+
+# Part 2
+l <- 35651584
+
+check2 <- function(x,l){
+  n <- substr(x,1,l)
+  m <- matrix(strsplit(n,"")[[1]],ncol=2,byrow=TRUE)
+  apply(m,1,\(x)x[1]==x[2])
+  paste(as.integer(m[,1]==m[,2]),collapse="")
+}
+
+res <- input
+while(nchar(res)<l){
+  res <- step(res)
+}
+z <- check2(res,l)
+while(!nchar(z)%%2){
+  res <- z
+  z <- check2(res,l)
+}
+z
+#00011010100010010
