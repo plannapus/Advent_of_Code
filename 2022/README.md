@@ -4,6 +4,8 @@ https://adventofcode.com/2022
 
 ![](screenshot.png)
 
+![](screenshot2.png)
+
 ## Visualizations
 
 ### Day 7: No Space Left On Device
