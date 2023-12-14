@@ -35,11 +35,6 @@ rinst = rev(instructions)
 trials = 101741582076661
 sp=position
 
-InvIncrement = function(position,ldeck,n){
-  i=1
-  while(tail(i,1)!=position){i = c(i,1+(tail(i,1)+n-1)%%ldeck)}
-  length(i)
-}
 t = 1
 while(t<trials){
   for(i in seq_along(instructions)){
@@ -47,22 +42,12 @@ while(t<trials){
       position = ldeck-position+1
     }else if(grepl("cut",rinst[i])){
       n = as.integer(regmatches(rinst[i],gregexpr("[0-9]+",rinst[i]))[[1]])
-      if(n<0){
-        if(abs(n)<position){
-          position = position - n
-        }else{
-          position = position + n
-        }
-      }else{
-        if(n>position){
-          position = position + n
-        }else{
-          position = position - n
-        }
-      }
+      position = (position-n)%%ldeck
+      if(position==0) position <- ldeck
     }else if(grepl("increment",rinst[i])){
       n = as.integer(regmatches(rinst[i],gregexpr("[0-9]+",rinst[i]))[[1]])
-      position = InvIncrement(position,ldeck,n)
+      position = n*position%%ldeck
+      if(position==0) position <- ldeck
     }
   }
   sp=c(sp,position)
