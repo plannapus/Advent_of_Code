@@ -83,11 +83,11 @@ maps[[1]] <- cycle(map)
 for(i in 2:cycles){
   maps[[i]] <- cycle(maps[[i-1]])
   if(sum(maps[[i]]=="O")!=sum(map=="O")) break
-  if(sum(duplicated(maps))>3) break
+  if(any(duplicated(maps))) break
   if(!i%%1000)cat(i,"\r")
 }
 l <- unique(which(duplicated(maps))-which(duplicated(maps,fromLast=TRUE)))
-s <- which(duplicated(maps,fromLast=TRUE))[1]
+s <- which(duplicated(maps,fromLast=TRUE))
 w <- sapply(maps,\(x)sum(rowSums(x=="O")*100:1))
 w[(cycles-s)%%l+s]
 #96317
