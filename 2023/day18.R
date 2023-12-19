@@ -9,10 +9,6 @@ for(i in 1:nrow(input)){
     path <- rbind(path,path[nrow(path),]+add)
   }
 }
-
-plot(NA,xlim=range(path[,1]),ylim=range(path[,2]))
-polygon(path)
-
 (abs(sum(path[-nrow(path),1]*path[-1,2])-sum(path[-nrow(path),2]*path[-1,1]))+nrow(path)-1)/2+1
 #50465
 
