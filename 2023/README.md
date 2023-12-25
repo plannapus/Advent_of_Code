@@ -14,3 +14,8 @@ https://adventofcode.com/2023
 #### (Part 2)
 
 ![](visualizations/day17.png)
+
+
+### Day 25: Snowverload
+
+![](visualizations/day25.png)
