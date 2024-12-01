@@ -12,7 +12,7 @@ library(igraph)
 g <- graph_from_data_frame(edges,directed=FALSE)
 E(g)$label <- 1:nrow(edges)
 plot(g)
-#369,846,2029
+#Visually identify edges as edges number 369,846,2029
 h <- graph_from_data_frame(edges[-c(369,846,2029),],directed=FALSE)
 distances(h)->d
 prod(sapply(split(d[1,],is.finite(d[1,])),length))
