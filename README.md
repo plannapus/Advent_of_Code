@@ -1,3 +1,9 @@
+### 2024
+
+https://adventofcode.com/2024
+
+![](2024/screenshot.png)
+
 ### 2023
 
 https://adventofcode.com/2023
