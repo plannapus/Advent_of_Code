@@ -4,6 +4,8 @@ https://adventofcode.com/2023
 
 ![](screenshot.png)
 
+![](screenshot2.png)
+
 ## Visualizations
 
 ### Day 10: Pipe Maze

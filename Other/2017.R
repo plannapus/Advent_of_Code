@@ -129,3 +129,22 @@ repeat{
 ## Part 2
 6681-which(apply(m,1,\(x)all(new==x)))+1
 #2392
+
+#Day 7
+## Part 1
+input <- readLines(read.input(2017,7))
+p <- parse.group("^(?<a>.+) \\((?<w>[0-9]+)\\)( -> (?<b>.+))?",input)
+s <- strsplit(p$b,", ")
+names(s) <- p$a
+edges <- matrix(ncol=2)
+for(i in seq_along(s)){
+  if(length(s[[i]])>0){
+    edges <- rbind(edges,cbind(p$a[i],s[[i]]))
+  }
+}
+library(igraph)
+g <- graph_from_edgelist(edges[-1,],directed=TRUE)
+plot(g,layout=layout_as_tree)
+#dtacyn
+
+## Part 2
