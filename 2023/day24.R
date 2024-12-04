@@ -55,16 +55,18 @@ sum(pxy[,1]>=window[1]&
 # t = (input[1,1]-x)/(vx-input[1,4])
 # y*vx - x*dy = input[1,1]*input[1,5]+input[1,2]*input[1,4]+input[1,2]*dx-input[1,1]*dy-x*input[1,5]
 # (input[2,5]-input[1,5])*x + (input[1,4]-input[2,4])*y + (input[1,2]-input[2,2])*vx + (input[2,1]-input[1,1])*vy = input[2,1]*input[2,5]-input[2,2]*input[2,4]-input[1,1]*input[1,5]+input[1,2]*input[1,4]
+# ^ replicated 4 times since 4 variables
+# then same 2 times additionally for Z:
+# (input[2,6]-input[1,6])*x + (input[1,4]-input[2,4])*z + (input[1,3]-input[2,3])*vx + (input[2,1]-input[1,1])*vz = input[2,1]*input[2,6]-input[2,3]*input[2,4]-input[1,1]*input[1,6]+input[1,3]*input[1,4]
 
-
-a = cbind(c(input[2,5]-input[1,5],
+a = cbind(c(input[2,5]-input[1,5], #X coefficients
             input[4,5]-input[3,5],
             input[6,5]-input[5,5],
             input[8,5]-input[7,5],
-            input[10,6]-input[9,6],
+            input[10,6]-input[9,6], #for Z computations
             input[12,6]-input[11,6]
             ),
-          c(input[1,4]-input[2,4],
+          c(input[1,4]-input[2,4], #Y coefficients
             input[3,4]-input[4,4],
             input[5,4]-input[6,4],
             input[7,4]-input[8,4],
@@ -83,7 +85,7 @@ a = cbind(c(input[2,5]-input[1,5],
             input[8,1]-input[7,1],
             0,0
             ),
-          c(0,0,0,0,
+          c(0,0,0,0, #Z coefficients
             input[9,4]-input[10,4],
             input[11,4]-input[12,4]),
           c(0,0,0,0,
@@ -96,5 +98,6 @@ b = cbind(c(input[2,1]*input[2,5]-input[2,2]*input[2,4]-input[1,1]*input[1,5]+in
             input[10,1]*input[10,6]-input[10,3]*input[10,4]-input[9,1]*input[9,6]+input[9,3]*input[9,4],
             input[12,1]*input[12,6]-input[12,3]*input[12,4]-input[11,1]*input[11,6]+input[11,3]*input[11,4]))
 
-r <- round(solve(a,b))
+r <- round(solve(a,b)) #Needs to be rounded because of floating point
 sum(r[c(1:2,5)])
+#1016365642179116
