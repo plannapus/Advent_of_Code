@@ -182,6 +182,7 @@ step4 <- sapply(step3,\(x)any(grepl("(.)((?!\\1).)\\2\\1",x,perl=TRUE)))
 sum(step2 & !step4)
 #115
 
+
 # Day 8
 ## Part 1
 input <- readLines(read.input(2016,8))
@@ -300,6 +301,9 @@ while(nrow(comps)){
 ## Part 2
 outputs$`0`*outputs$`1`*outputs$`2`
 #2666
+
+#Day 11
+
 
 # Day 12
 ## Part 1
@@ -498,3 +502,61 @@ while(!nchar(z)%%2){
 }
 z
 #00011010100010010
+
+
+# Day 18
+## Part 1
+input <- strsplit(scan(read.input(2016,18),""),"")[[1]]
+map <- matrix(nrow=40,ncol=100)
+map[1,] <- input
+for(i in 2:40){
+  for(j in 1:100){
+    left <- ifelse(j==1,".",map[i-1,j-1])
+    center <- map[i-1,j]
+    right <- ifelse(j==100,".",map[i-1,j+1])
+    if(left=="^"){
+      if(right==".") map[i,j] <- "^"
+      if(right=="^") map[i,j] <- "."
+    }else{
+      if(right=="^") map[i,j] <- "^"
+      if(right==".") map[i,j] <- "."
+    }
+  }
+}
+sum(map==".")
+#1989
+
+## Part 2
+map <- rbind(map,matrix(ncol=100,nrow=400000-40))
+for(i in 41:400000){
+  for(j in 1:100){
+    left <- ifelse(j==1,".",map[i-1,j-1])
+    center <- map[i-1,j]
+    right <- ifelse(j==100,".",map[i-1,j+1])
+    if(left=="^"){
+      if(right==".") map[i,j] <- "^"
+      if(right=="^") map[i,j] <- "."
+    }else{
+      if(right=="^") map[i,j] <- "^"
+      if(right==".") map[i,j] <- "."
+    }
+  }
+  if(!i%%10000)cat(i,"\r")
+}
+sum(map==".")
+#19999894
+
+## Day 19
+# Part 1
+
+input <- 3014603
+# ring <- 1:input
+# elf <- 1
+# while(length(ring)>1){
+#   w <- which(ring==elf)
+#   out <- ifelse(w==length(ring),ring[1],ring[w+1])
+#   nelf <- ifelse(w==length(ring),ring[2],ifelse((w+1)==length(ring),ring[1],ring[w+2]))
+#   ring <- ring[ring!=out]
+#   elf <- nelf
+# }
+# ring

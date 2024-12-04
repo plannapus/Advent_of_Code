@@ -517,6 +517,63 @@ s[!is.na(s)][1]
 # 17
 
 # Day 18
+## Part 1
+map <- do.call(rbind,strsplit(readLines(read.input(2015,18)),""))
+steps <- list()
+steps[[1]] <- map
+count_n <- \(map,i,j){
+  n <- 0
+  if(i!=1 & j!=1) n <- n + (map[i-1,j-1]=="#")
+  if(i!=1) n <- n + (map[i-1,j]=="#")
+  if(i!=1 & j!=100) n <- n + (map[i-1,j+1]=="#")
+  if(j!=1) n <- n + (map[i,j-1]=="#")
+  if(j!=100) n <- n + (map[i,j+1]=="#")
+  if(i!=100 & j!=1) n <- n + (map[i+1,j-1]=="#")
+  if(i!=100) n <- n + (map[i+1,j]=="#")
+  if(i!=100 & j!=100) n <- n + (map[i+1,j+1]=="#")
+  n
+}
+for(t in 1:100){
+  newmap <- steps[[t]]
+  newmap[] <- "."
+  for(i in 1:100){
+    for(j in 1:100){
+      n <- count_n(steps[[t]],i,j)
+      if(steps[[t]][i,j]=="#"){
+        if(n%in%(2:3)) newmap[i,j] <- "#"
+      }else{
+        if(n==3) newmap[i,j] <- "#"
+      }
+    }
+  }
+  steps[[t+1]] <- newmap
+}
+sum(steps[[101]]=="#")
+#814
+
+## Part 2
+map <- do.call(rbind,strsplit(readLines(read.input(2015,18)),""))
+map[1,1] <- map[1,100] <- map[100,1] <- map[100,100] <- "#"
+steps <- list()
+steps[[1]] <- map
+for(t in 1:100){
+  newmap <- steps[[t]]
+  newmap[] <- "."
+  for(i in 1:100){
+    for(j in 1:100){
+      n <- count_n(steps[[t]],i,j)
+      if(steps[[t]][i,j]=="#"){
+        if(n%in%(2:3)) newmap[i,j] <- "#"
+      }else{
+        if(n==3) newmap[i,j] <- "#"
+      }
+    }
+  }
+  newmap[1,1] <-  newmap[1,100] <-  newmap[100,1] <-  newmap[100,100] <- "#"
+  steps[[t+1]] <- newmap
+}
+sum(steps[[101]]=="#")
+#924
 
 # Day 19
 ## Part 1
@@ -552,24 +609,127 @@ length(unique(newmol))
 
 ## Part 2
 
-# Day 20 (unfinished)
+# Day 20
+##Part 1
+library(numbers)
 input <- 29000000
-
-houses <- rep(0,1e6)
-for(i in 1:1e6){
-  houses[seq(i,1e6,by=i)]<-houses[seq(i,1e6,by=i)]+i*10
-  if(any(houses)>=input) break
-  if(!i%%1000)cat(i,":",max(houses),"\r")
+house <- 1
+while(sum(divisors(house)*10)<input){
+  house <- house + 1
+  if(!house%%1000) cat(house,"\r")
 }
-which(houses>=input)
+house
+#665280
+##Part 2
 
+house <- 1
+repeat{
+  n <- sum(sapply(1:50,\(x)ifelse(!house%%x,house%/%x,0)))*11
+  if(n>=input) stop(house)
+  house <- house + 1
+  if(!house%%1000) cat(house,"\r")
+}
+#705600
 
 # Day 21
 
 # Day 22
 
 # Day 23
+##Part 1
+input <- readLines(read.input(2015,23))
+a <- b <- 0
+i <- 1
+repeat{
+  inp <- el(strsplit(input[i],"[ ,]+"))
+  if(inp[1]=="hlf"){
+    if(inp[2]=="a"){
+      a <- a%/%2
+    }else{
+      b <- b%/%2
+    }
+    i <- i+1
+  }
+  if(inp[1]=="tpl"){
+    if(inp[2]=="a"){
+      a <- a*3
+    }else{
+      b <- b*3
+    }
+    i <- i+1
+  }
+  if(inp[1]=="inc"){
+    if(inp[2]=="a"){
+      a <- a+1
+    }else{
+      b <- b+1
+    }
+    i <- i+1
+  }
+  if(inp[1]=="jmp"){
+    i <- i+as.integer(inp[2])
+  }
+  if(inp[1]=="jie"){
+    if(inp[2]=="a") i <- i + ifelse(a%%2==0,as.integer(inp[3]),1)
+    if(inp[2]=="b") i <- i + ifelse(b%%2==0,as.integer(inp[3]),1)
+  }
+  if(inp[1]=="jio"){
+    if(inp[2]=="a") i <- i + ifelse(a==1,as.integer(inp[3]),1)
+    if(inp[2]=="b") i <- i + ifelse(b==1,as.integer(inp[3]),1)
+  }
+  if(i>47) break()
+}
+b
+#307
+a <- 1
+b <- 0
+i <- 1
+repeat{
+  inp <- el(strsplit(input[i],"[ ,]+"))
+  if(inp[1]=="hlf"){
+    if(inp[2]=="a"){
+      a <- a%/%2
+    }else{
+      b <- b%/%2
+    }
+    i <- i+1
+  }
+  if(inp[1]=="tpl"){
+    if(inp[2]=="a"){
+      a <- a*3
+    }else{
+      b <- b*3
+    }
+    i <- i+1
+  }
+  if(inp[1]=="inc"){
+    if(inp[2]=="a"){
+      a <- a+1
+    }else{
+      b <- b+1
+    }
+    i <- i+1
+  }
+  if(inp[1]=="jmp"){
+    i <- i+as.integer(inp[2])
+  }
+  if(inp[1]=="jie"){
+    if(inp[2]=="a") i <- i + ifelse(a%%2==0,as.integer(inp[3]),1)
+    if(inp[2]=="b") i <- i + ifelse(b%%2==0,as.integer(inp[3]),1)
+  }
+  if(inp[1]=="jio"){
+    if(inp[2]=="a") i <- i + ifelse(a==1,as.integer(inp[3]),1)
+    if(inp[2]=="b") i <- i + ifelse(b==1,as.integer(inp[3]),1)
+  }
+  if(i>47) break()
+}
+b
+#160
 
 # Day 24
+p <- scan(read.input(2015,24))
+m <- sum(p)/3
+
+
 
 # Day 25
