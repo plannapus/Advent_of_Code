@@ -18,11 +18,10 @@ g <- sapply(lis,\(x)all(sapply(x,\(y)check(y,x))))
 good <- lis[g]
 sum(sapply(good,\(x)as.integer(x[(length(x)+1)/2])))
 #5639
-library(igraph)
+
 bad <- lis[!g]
 correct <- \(l){
   rules <- ord[ord[,1]%in%l&ord[,2]%in%l,]
-  #h <- graph_from_edgelist(rules,directed=TRUE)
   start <- l[l%in%rules[,1]&!l%in%rules[,2]]
   p <- start
   L <- length(l)
