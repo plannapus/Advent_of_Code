@@ -148,3 +148,155 @@ plot(g,layout=layout_as_tree)
 #dtacyn
 
 ## Part 2
+p$w <- as.integer(p$w)
+p$s <- 0
+p$s[p$b==""] <- p$w[p$b==""]
+
+repeat{
+  for(i in seq_along(s)){
+    if(length(s[[i]])>0){
+      S <- p$s[p$a%in%s[[i]]]
+      if(!any(is.na(S))){
+        if(all(S==S[1])){
+          p$s[i] <- sum(S)+p$w[i]
+        }else{stop(i)}
+      }
+    }
+  }
+}
+p[p$a%in%s[[i]]]
+526-(1122-1117)
+
+#521
+
+# Day 8
+input <- readLines(read.input(2017,8))
+df <- parse.group("^(?<a>[a-z]+) (?<inst>[a-z]+) (?<n>[-0-9]+) if (?<b>[a-z]+) (?<eq>[<>=!]+) (?<m>[-0-9]+)$",head(input,-1))
+u <- unique(c(df$a,df$b))
+reg <- rep(0,length(u))
+names(reg) <- u
+for(i in 1:nrow(df)){
+  b <- reg[df$b[i]]
+  m <- as.integer(df$m[i])
+  n <- as.integer(df$n[i])
+  flag <- FALSE
+  if(df$eq[i]=="!=") if(b!=m) flag <- TRUE
+  if(df$eq[i]=="<") if(b<m) flag <- TRUE
+  if(df$eq[i]=="<=") if(b<=m) flag <- TRUE
+  if(df$eq[i]==">") if(b>m) flag <- TRUE
+  if(df$eq[i]==">=") if(b>=m) flag <- TRUE
+  if(df$eq[i]=="==") if(b==m) flag <- TRUE
+  if(flag){
+    if(df$inst[i]=="inc") reg[df$a[i]] <- reg[df$a[i]] + n
+    if(df$inst[i]=="dec") reg[df$a[i]] <- reg[df$a[i]] - n
+  }
+}
+max(reg)
+# 5966
+
+z <- max(reg)
+reg <- rep(0,length(u))
+names(reg) <- u
+for(i in 1:nrow(df)){
+  b <- reg[df$b[i]]
+  m <- as.integer(df$m[i])
+  n <- as.integer(df$n[i])
+  flag <- FALSE
+  if(df$eq[i]=="!=") if(b!=m) flag <- TRUE
+  if(df$eq[i]=="<") if(b<m) flag <- TRUE
+  if(df$eq[i]=="<=") if(b<=m) flag <- TRUE
+  if(df$eq[i]==">") if(b>m) flag <- TRUE
+  if(df$eq[i]==">=") if(b>=m) flag <- TRUE
+  if(df$eq[i]=="==") if(b==m) flag <- TRUE
+  if(flag){
+    if(df$inst[i]=="inc") reg[df$a[i]] <- reg[df$a[i]] + n
+    if(df$inst[i]=="dec") reg[df$a[i]] <- reg[df$a[i]] - n
+    if(max(reg)>z) z <- max(reg)
+  }
+}
+z
+#6347
+
+# Day 9
+## Part 1
+input <- scan(read.input(2017,9),"")
+g <- rep(FALSE,nchar(input))
+go <- rep(0,nchar(input))
+gb <- FALSE
+i <- 1
+gbc <- 0
+lvl <- 0
+while(i<=nchar(input)){
+  s <- substr(input,i,i)
+  if(s=="{" & !gb){
+    g[i] <- TRUE
+    lvl <- lvl +1
+    go[i] <- lvl
+  }
+  if(s=="}" & !gb){
+    j <- tail(which(g),1)
+    g[j] <- FALSE
+    lvl <- lvl -1
+  }
+  if(s==">") gb <- FALSE
+  if(s=="!"){
+    i <- i+2
+  }else{
+    if(gb) gbc <- gbc+1
+    i <- i+1
+  }
+  if(s=="<") gb <- TRUE
+}
+sum(go)
+#16869
+
+gbc
+#87284
+
+## Day 10
+# Part 1
+input <- scan(read.input(2017,10),sep=",")
+ring <- 0:255
+x <- 1
+skip <- 0
+
+for(i in seq_along(input)){
+  y <- x+input[i]-1
+  nn <- (x:y)%%256
+  nn[nn==0] <- 256
+  ring[nn] <- rev(ring[nn])
+  x <- y+skip+1
+  skip <- skip +1
+}
+prod(ring[1:2])
+#7888
+
+# Part 2
+readLines(read.input(2017,10))->input
+l <- c(as.integer(charToRaw(input[1])),17, 31, 73, 47, 23)
+ring <- 0:255
+x <- 1
+skip <- 0
+
+for(t in 1:64){
+  for(i in seq_along(l)){
+    y <- x+l[i]-1
+    nn <- (x:y)%%256
+    nn[nn==0] <- 256
+    ring[nn] <- rev(ring[nn])
+    x <- y+skip+1
+    skip <- skip +1
+  }
+}
+
+M <- matrix(ring,ncol=16,byrow=TRUE)
+res <- rep(NA,16)
+for(i in 1:16){
+  a <- M[i,j]
+  for(j in 2:16){
+    a <- bitwXor(a,M[i,j])
+  }
+  res[i] <- a
+}
+paste(as.hexmode(res),collapse="")
+# 2e9e81888d14ded85fa8228489ccdfaf
