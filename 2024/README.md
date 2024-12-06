@@ -5,3 +5,7 @@ https://adventofcode.com/2024
 ![](screenshot.png)
 
 ## Visualizations
+
+### Day 06
+
+![](visualizations/day06.png)
