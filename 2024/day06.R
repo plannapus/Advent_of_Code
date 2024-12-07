@@ -55,3 +55,19 @@ for(i in 2:nrow(s)){ #quite slow
 }
 sum(ob,na.rm=TRUE) #the first one is NA as it is the starting position.
 #1753
+
+##Visualization
+imap <- do.call(rbind,strsplit(chartr("#^.","011",readLines(read.input(6))),""))
+imap <- apply(imap,2,as.integer)
+par(mfcol=c(1,2))
+par(mar=c(1,1,1,1))
+image(1:130,1:130,t(imap),col=c("black","grey90"),ax=F,ann=F,xlim=c(0,131),ylim=c(131,0),xaxs="i",yaxs="i")
+points(steps[1,2],steps[1,1],col="red",pch=19,cex=0.8)
+points(steps[,2:1],col="red",pch=19,cex=0.2)
+box(lwd=2)
+par(mar=c(1,1,1,1))
+image(1:130,1:130,t(imap),col=c("black","grey90"),ax=F,ann=F,xlim=c(0,131),ylim=c(131,0),xaxs="i",yaxs="i")
+ob[1] <- FALSE
+points(steps[ob,2:1],pch=22,bg="red",cex=0.8)
+box(lwd=2)
+dev.copy(png,"day06.png",w=1000,h=500,res=100);dev.off()

@@ -271,7 +271,7 @@ for(i in seq_along(input)){
 prod(ring[1:2])
 #7888
 
-# Part 2
+# Part 2 (unfinished)
 readLines(read.input(2017,10))->input
 l <- c(as.integer(charToRaw(input[1])),17, 31, 73, 47, 23)
 ring <- 0:255
@@ -300,3 +300,55 @@ for(i in 1:16){
 }
 paste(as.hexmode(res),collapse="")
 # 2e9e81888d14ded85fa8228489ccdfaf #Apparently not
+
+
+# Day 11
+## Part 1
+input <- strsplit(readLines(read.input(2017,11)),",")[[1]]
+hex <- as.data.frame(do.call(rbind,list(n=c(0,1,-1),
+                                        ne=c(1,0,-1),
+                                        nw=c(-1,1,0),
+                                        s=c(0,-1,1),
+                                        sw=c(-1,0,1),
+                                        se=c(1,-1,0))))
+pos <- c(0,0,0)
+for(i in seq_along(input)) pos <- pos + hex[input[i],]
+sum(abs(pos))/2
+#643
+
+## Part 2
+pos <- c(0,0,0)
+hex <- list(n=c(0,1,-1),ne=c(1,0,-1),nw=c(-1,1,0),s=c(0,-1,1),sw=c(-1,0,1),se=c(1,-1,0))
+store <- matrix(ncol=3,nrow=length(input))
+for(i in seq_along(input)){
+  pos <- pos + hex[input[i]][[1]]
+  store[i,1:3] <- unlist(pos)
+}
+max(apply(store,1,\(x)sum(abs(x))/2))
+#1471
+
+# Day 12
+## Part 1
+input <- readLines(read.input(2017,12))
+s <- do.call(rbind,strsplit(input," <-> "))
+lis <- strsplit(s[,2],", ")
+names(lis) <- s[,1]
+d <- list()
+for(i in seq_along(lis)){
+  d[[i]] <- data.frame(from=names(lis)[i],to=lis[[i]])
+}
+edges <- do.call(rbind,d)
+library(igraph)
+g <- graph_from_edgelist(as.matrix(edges))
+sum(is.finite(distances(g)["0",]))
+# 152
+
+d <- distances(g)
+cliques <- 0
+while(length(d)>0){
+  d <- d[!is.finite(d[1,]),!is.finite(d[,1]),drop=FALSE]
+  cliques <- cliques + 1
+}
+cliques
+# 186
+
