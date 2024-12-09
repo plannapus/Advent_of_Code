@@ -28,7 +28,7 @@ for(i in seq_along(head(input,-1))){
 m
 #1708857123053
 
-f <- \(x,y,n){
+f <- \(x,y,n){ #Recursivity for the win
   if(n>x) return(0)
   if(length(y)==0) if(abs(x-n)<1){return(x)}else{return(0)}
   n1 <- f(x,y[-1],n + head(y,1))
@@ -38,7 +38,6 @@ f <- \(x,y,n){
     return(x)
   }else{return(0)}
 }
-
 
 p <- 0
 for(i in seq_along(head(input,-1))){
