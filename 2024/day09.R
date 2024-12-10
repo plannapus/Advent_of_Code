@@ -32,7 +32,7 @@ sum(tape*(seq_along(tape)-1))
 #6421128769094
 
 tape <- tape2
-tape[is.na(tape)]<--1
+tape[is.na(tape)]<--1 #for some reason NA don t work with rle
 mapping <- cbind(0:max(tape),input[(seq_along(input)%%2)==1])
 for(i in nrow(mapping):1){
   r <- rle(tape)
