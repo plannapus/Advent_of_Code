@@ -157,9 +157,9 @@ while(length(res)<8){
     res <- c(res,substr(md,6,6))
   }
   i <- i +1
-  cat(res,"\r")
+  if(!i%%10000)cat(res,"\r")
 }
-
+cat(res,sep="")
 
 # Day 6
 ## Part 1
