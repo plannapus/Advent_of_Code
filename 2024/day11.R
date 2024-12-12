@@ -64,4 +64,5 @@ for(t in 1:75){
   memo <- memo2
   cat(t,"\r")
 }
+sum(memo[,2])
 #221632504974231
