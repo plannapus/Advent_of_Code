@@ -1,4 +1,4 @@
-input <- readLines("input.txt")
+input <- readLines(read.input(13))
 a <- parse.group("Button A: X(?<xa>[-+0-9]+), Y(?<ya>[-+0-9]+)",input[seq(1,length(input),4)])
 a <- apply(a,2,as.integer)
 b <- parse.group("Button B: X(?<xb>[-+0-9]+), Y(?<yb>[-+0-9]+)",input[seq(2,length(input),4)])
