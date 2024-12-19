@@ -48,3 +48,18 @@ for(b in 1025:3450){
 }
 paste(input[b,],collapse=",")
 #32,55
+
+
+
+#### Visualizations:
+dir.create("png")
+setwd("png")
+for(b in 1:3450){
+  png(sprintf("%04i.png",b),w=400,h=400)
+  par(mar=c(0,0,0,0))
+  image(1:71,1:71,t(mtt[[b]]),ylim=c(71,1))
+  dev.off()
+}
+system("convert -delay 5 -loop 1 *.png ../day18.gif")
+setwd("..")
+unlink("png",recursive=TRUE)
