@@ -95,11 +95,6 @@ for(i in 1:5){
   r2 <- r2[sapply(r2,length)==min(sapply(r2,length))]
   l <- sapply(r2,find_disp,2,length.only=TRUE)
   s[i] <- as.integer(substr(input[i],1,3))*min(l)
-  # r3 <- unlist(lapply(r2,find_disp,2),recursive=FALSE)
-  # r3 <- r3[sapply(r3,length)==min(sapply(r3,length))]
-  # cat(i,"- 3:",length(r3),"\n")
-  # s[i] <- as.integer(substr(input[i],1,3))*min(sapply(r3,length))
-  # cat(r3[which.min(sapply(r3,length))][[1]],"\n")
   cat(s[i],"\n")
 }
 
@@ -107,24 +102,19 @@ cat(sum(s))
 #197560
 
 pairs <- list("<A"=c(">>^A"),"<<"=c("A"),"<v"=c(">A"),"<^"=c(">^A"),
-     "^A"=c(">A"),"^^"=c("A"),"^<"=c("v<"),"^>"=c("v>",">v"),
-     ">A"=c("^A"),">>"=c("A"),">^"=c("^<","<^"),">v"=c("<A"),
-     "vA"=c(">^A","^>A"),"v<"=c("<A"),"v>"=c(">A"),"vv"=c("A"),
-     "AA"=c("A"),"A<"=c("v<<A"),"A>"=c("vA"),"A^"=c("<A"),"Av"=c("<vA","v<A"))
+     "^A"=c(">A"),"^^"=c("A"),"^<"=c("v<A"),"^>"=c("v>A"),
+     ">A"=c("^A"),">>"=c("A"),">^"=c("<^A"),">v"=c("<A"),
+     "vA"=c("^>A"),"v<"=c("<A"),"v>"=c(">A"),"vv"=c("A"),
+     "AA"=c("A"),"A<"=c("v<<A"),"A>"=c("vA"),"A^"=c("<A"),"Av"=c("<vA"))
+
+
+
+#>^A <^A>A >^A>AvA^A
+#^>A v>A^A >A^A<A>A
 
 find_disp2 <-\(x){
   A <- apply(embed(c("A",strsplit(x,"")[[1]]),2)[,2:1],1,paste,collapse="")
-  p <- lapply(A,\(x)pairs[x][[1]])
-  r <- ""
-  for(i in seq_along(p)){
-    if(length(r)==1) r <- paste0(r,p[[i]])
-    if(length(r)>1){
-      nr <- c()
-      for(j in seq_along(r)) nr <- c(nr,paste0(r[j],p[[i]]))
-      r <- nr
-    }
-  }
-  r
+  paste(sapply(A,\(x)pairs[x][[1]]),collapse="")
 }
 
 s <- c()
@@ -136,7 +126,8 @@ for(i in 1:5){
     r2 <- unlist(sapply(r2,find_disp2))
     n <- sapply(r2,nchar)
     r2 <- r2[n==min(n)]
-    cat(min(n),"\n")
+    cat(j,":",length(r2),":",min(n),"\n")
   }
   s[i] <- as.integer(substr(input[i],1,3))*nchar(r2[1])
 }
+cat(sum(s))
