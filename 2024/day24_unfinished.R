@@ -48,6 +48,8 @@ options(digits=22)
 fromBitArr(r)
 #59336987801432
 
+
+##Part 2
 xs <- reg[grepl("^x",reg$i),]
 nx <- parse.group("z(?<n>[0-9]+)$",xs$i)
 rx <- xs$b[order(as.integer(nx$n),decreasing=TRUE)]
@@ -64,6 +66,5 @@ for(i in 1:nrow(gates)){
 }
 library(igraph)
 g <- graph_from_edgelist(edges,directed=TRUE)
-
 
 u <- unique(c(gates$a,gates$b,gates$res))

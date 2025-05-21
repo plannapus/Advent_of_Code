@@ -15,7 +15,6 @@ for(i in seq_along(w)){
   }
 }
 
-
 pairs <- 0
 for(i in seq_along(keys)){
   for(j in seq_along(locks)){
@@ -23,6 +22,6 @@ for(i in seq_along(keys)){
       pairs <- pairs+1
     }
   }
-  cat(i,"\r")
 }
+pairs
 #3483

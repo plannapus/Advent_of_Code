@@ -1,4 +1,5 @@
 library(igraph)
+library(reshape)
 source("read.input.R")
 map <- read.map(20)
 start <- which(map=="S",arr.ind=TRUE)
@@ -49,20 +50,19 @@ sum(t0-t1>=100)
 #1393
 
 d <- distances(g,v=e)
-df <- reshape2::melt(d)
-df <- df[df[,2]!=0,]
+df <- melt(d)
+df <- df[df[,3]!=0,]
 df[,1] <- as.character(df[,1])
 df[,2] <- as.character(df[,2])
 
-cb <- t(combn(1:9337,2))
-save <- c()
+sp <- shortest_paths(g,s,e)$vpath[[1]]
+
+cb <- t(combn(1:9336,2))
+save <- dist <- c()
 for(i in 1:nrow(cb)){
-  dist <- sum(abs(as.integer(strsplit(df[cb[i,1],2],"_")[[1]])-as.integer(strsplit(df[cb[i,2],2],"_")[[1]])))
-  if(dist<=20){
-    save[i] <- df$value[cb[i,1]]-df$value[cb[i,2]]-dist 
-  }
+  dist[i] <- sum(abs(as.integer(strsplit(df[cb[i,1],2],"_")[[1]])-as.integer(strsplit(df[cb[i,2],2],"_")[[1]])))
+  save[i] <- df$value[cb[i,1]]-df$value[cb[i,2]]-dist[i]+1
   if(!i%%10000)cat(i,"\r")
 }
-sum(save>=100,na.rm=TRUE)
-
-###990096
+sum(save[dist<=20]>=100,na.rm=TRUE)
+#990096

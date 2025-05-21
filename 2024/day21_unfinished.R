@@ -101,23 +101,25 @@ for(i in 1:5){
 cat(sum(s))
 #197560
 
-pairs <- list("<A"=c(">>^A"),"<<"=c("A"),"<v"=c(">A"),"<^"=c(">^A"),
-     "^A"=c(">A"),"^^"=c("A"),"^<"=c("v<A"),"^>"=c("v>A"),
-     ">A"=c("^A"),">>"=c("A"),">^"=c("<^A"),">v"=c("<A"),
-     "vA"=c("^>A"),"v<"=c("<A"),"v>"=c(">A"),"vv"=c("A"),
-     "AA"=c("A"),"A<"=c("v<<A"),"A>"=c("vA"),"A^"=c("<A"),"Av"=c("<vA"))
-
-
-
-#>^A <^A>A >^A>AvA^A
-#^>A v>A^A >A^A<A>A
+pairs <- list("<A"=">>^A","<<"="A","<v"=">A","<^"=">^A",
+     "^A"=">A","^^"="A","^<"="v<A","^>"="v>A",
+     ">A"="^A",">>"="A",">^"="<^A",">v"="<A",
+     "vA"="^>A","v<"="<A","v>"=">A","vv"="A",
+     "AA"="A","A<"="v<<A","A>"="vA","A^"="<A","Av"="<vA")
 
 find_disp2 <-\(x){
-  A <- apply(embed(c("A",strsplit(x,"")[[1]]),2)[,2:1],1,paste,collapse="")
+  A <- apply(embed(c("A",strsplit(x,"")[[1]]),2)[,2:1,drop=FALSE],1,paste,collapse="")
   paste(sapply(A,\(x)pairs[x][[1]]),collapse="")
 }
+# 
+# find_disp3 <-\(x){
+#   A <- ""
+#   for(i in 1:(nchar(x)+1)) A <- paste0(A,pairs[[substr(paste0("A",x),i-1,i)]])
+#   A
+# }
+# 
+# find_disp4 <- \(x) paste(sapply(apply(cbind(1:(nchar(x)-1),2:nchar(x)),1,\(z)substr(paste0("A",x),z[1],z[2])),\(y)pairs[[y]]),collapse="")
 
-s <- c()
 for(i in 1:5){
   r1 <- find_disp(inp[[i]],1)
   r1 <- sapply(r1,paste,collapse="")
@@ -131,3 +133,31 @@ for(i in 1:5){
   s[i] <- as.integer(substr(input[i],1,3))*nchar(r2[1])
 }
 cat(sum(s))
+
+memo <- list()
+p <- \(pair,level=1){
+  if(pair%in%names(memo)) return(memo[[pair]])
+  pp <- pairs[[pair]]
+  level <- level+1
+  if(level==25) return(nchar(pp))
+  e <- embed(strsplit(paste0("A",pp),"")[[1]],2)[,2:1,drop=FALSE]
+  np <- apply(e,1,paste,collapse="")
+  l <- sum(sapply(np,p,level=level))
+  memo[[pair]] <<- l
+  return(l)
+}
+
+s <- rep(Inf,5)
+for(i in 1:5){
+  r1 <- find_disp(inp[[i]],1)
+  r1 <- sapply(r1,paste,collapse="")
+  for(j in seq_along(r1)){
+    ps <- apply(embed(strsplit(r1[1],"")[[1]],2)[,2:1],1,paste,collapse="")
+    ssa <- as.integer(substr(input[i],1,3))*sum(sapply(ps,p,level=1))
+    if(ssa<s[i]) s[i] <- ssa
+  }
+}
+
+
+cat(sum(s))
+ 
