@@ -16,17 +16,17 @@ sum(check)
 
 #sum(apply(fresh,1,diff)+1) #Nope
 
-fresh <- fresh[order(fresh[,1],fresh[,2]),]
+fresh <- fresh[order(fresh[,1],fresh[,2]),] #Sort the list so that we can easily compare overlapping ranges
 simp <- fresh[1,,drop=FALSE]
 for(i in 2:nrow(fresh)){
   if(fresh[i,1]<=simp[nrow(simp),2]){
     if(fresh[i,2]>simp[nrow(simp),2]){
-      simp[nrow(simp),2] <- fresh[i,2]
-    }else{
-      next
+      simp[nrow(simp),2] <- fresh[i,2] #Concatenate overlapping ranges
+    }else{ #Case of range already fully included in previous one
+      next #Not necessary but when else would you have the occasion of using it
     }
   }else{
-    simp <- rbind(simp,fresh[i,])
+    simp <- rbind(simp,fresh[i,]) #Non-overlapping range
   }
 }
 sum(apply(simp,1,diff)+1)
